@@ -48,6 +48,17 @@
   .field{display:flex;flex-direction:column;}
 
   .meta{color:var(--ink-faint);font-size:12px;margin:14px 2px 6px;}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .newbtn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:var(--radius);padding:7px 14px;font:inherit;cursor:pointer;white-space:nowrap;}
+  .newbtn:hover{filter:brightness(1.05);}
+  .newform{margin-bottom:12px;}
+  .nrow{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap;}
+  .nrow label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);min-width:74px;}
+  .nrow span{font-size:12px;color:var(--ink-faint);}
+  .ntf{font:inherit;padding:6px 8px;border:1px solid var(--line-strong);border-radius:6px;min-width:0;flex:1;}
+  .ntf.small{flex:none;width:120px;}
+  .nform-actions{display:flex;gap:8px;margin-top:14px;}
+  .nform-actions button{border:1px solid var(--line-strong);border-radius:6px;padding:7px 14px;cursor:pointer;font:inherit;}
   .queue{display:flex;flex-direction:column;gap:10px;}
   .empty{color:var(--ink-faint);font-style:italic;padding:18px;text-align:center;}
 
@@ -115,11 +126,12 @@ const state = {
   catMulti: false, catTypeKnown: false, asgMulti: false, asgTypeKnown: false, priIsBool: false, priTypeKnown: false,
   typesChecked: false,
   // queue settings (persisted)
-  projects: [], timing: "all", sort: "due", count: 5, limit: true, randSeed: "seed1", resetStatus: "",
+  projects: [], timing: "all", sort: "due", count: 5, limit: true, randSeed: "seed1",
   // transient editor state
   openStatusRow: null, openDateRow: null, editingDescRow: null, editingCatRow: null, editingPriRow: null, editingProjRow: null, editingRecRow: null,
   expandedRows: new Set(),
-  resetting: new Set(), // recurring tasks currently being auto-reset
+  creating: false, newDraft: null,            // "New task" form
+  prevComplete: {}, snapshotReady: false, spawning: new Set(), // recurrence: spawn on open->complete transition
 };
 const COMPLETE_WORDS = new Set(["complete","completed","done","closed","resolved","finished"]);
 const CANCEL_WORDS = new Set(["cancelled","canceled","void","withdrawn","dismissed"]);
@@ -162,22 +174,12 @@ function recCats(r){const l=toList(r.category);return l.length?l:[NO_CAT];}
 function recProj(r){const l=toList(r.project);return l.length?l:[NO_PROJECT];}
 function ymd(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
 function addCalendarDays(d,n){const x=ymd(d);x.setDate(x.getDate()+n);return x;}
-function addMonths(d,n){const x=ymd(d);const day=x.getDate();x.setDate(1);x.setMonth(x.getMonth()+n);const last=new Date(x.getFullYear(),x.getMonth()+1,0).getDate();x.setDate(Math.min(day,last));return x;}
-function parseRecurrence(v){
-  if(v===null||v===undefined)return null;const s=String(v).trim().toLowerCase();if(!s)return null;
-  const m=s.match(/^(\d+)\s*(d|day|days|w|wk|wks|week|weeks|mo|month|months|m|y|yr|year|years)\b/);
-  if(!m)return null;const n=parseInt(m[1],10);if(!n||n<1)return null;
-  const c=m[2][0];const unit=c==="d"?"day":c==="w"?"week":c==="y"?"year":"month";
-  return {n:n,unit:unit};
+function parseRecurDays(v){
+  if(v===null||v===undefined)return null;
+  if(typeof v==="number")return (isFinite(v)&&v>=1)?Math.round(v):null;
+  const m=String(v).match(/(\d+)/);if(!m)return null;const n=parseInt(m[1],10);return (n>=1)?n:null;
 }
-function recStr(n,unit){return n+" "+unit+(n===1?"":"s");}
-function fmtRecurrence(rec){return "every "+rec.n+" "+rec.unit+(rec.n===1?"":"s");}
-function addInterval(date,rec){
-  if(rec.unit==="day")return addCalendarDays(date,rec.n);
-  if(rec.unit==="week")return addCalendarDays(date,rec.n*7);
-  if(rec.unit==="year")return addMonths(date,rec.n*12);
-  return addMonths(date,rec.n);
-}
+function fmtRecurDays(n){return "every "+n+" day"+(n===1?"":"s");}
 function statusStr(r){return (r.status===null||r.status===undefined)?"":String(r.status).trim().toLowerCase();}
 function isComplete(r){return state.mapped.Status&&COMPLETE_WORDS.has(statusStr(r));}
 function isReady(r){return state.mapped.Status&&READY_WORDS.has(statusStr(r));}
@@ -259,25 +261,48 @@ function setStatus(id,v){if(state.mapped.Status)writeField(id,state.cols.Status,
 function setDue(id,ts){if(state.mapped.DueDate)writeField(id,state.cols.DueDate,ts,"due date");}
 function setDescription(id,t){if(state.mapped.Description)writeField(id,state.cols.Description,(t&&t.trim()!=="")?t:null,"description");}
 function setProject(id,arr){if(state.mapped.Project)writeField(id,state.cols.Project,(arr&&arr.length)?arr[0]:null,"project");}
-function setRecurrence(id,str){if(state.mapped.Recurrence)writeField(id,state.cols.Recurrence,(str&&str.trim()!=="")?str:null,"recurrence");}
+function setRecurrence(id,n){if(state.mapped.Recurrence)writeField(id,state.cols.Recurrence,(typeof n==="number"&&n>=1)?n:null,"recurrence");}
 function setCategory(id,arr){if(state.mapped.Category)writeField(id,state.cols.Category,encodeMulti(arr,state.catMulti),"category");}
 function setPriority(id,arr){if(!state.mapped.Priority)return;let v=(arr&&arr.length)?arr[0]:null;if(v!==null&&v!==""&&!isNaN(Number(v)))v=Number(v);writeField(id,state.cols.Priority,v,"priority");}
 
-function persist(){if(!state.haveGrist)return;try{grist.setOptions({projects:state.projects,timing:state.timing,sort:state.sort,count:state.count,limit:state.limit,randSeed:state.randSeed,resetStatus:state.resetStatus});}catch(e){}}
+function persist(){if(!state.haveGrist)return;try{grist.setOptions({projects:state.projects,timing:state.timing,sort:state.sort,count:state.count,limit:state.limit,randSeed:state.randSeed});}catch(e){}}
 
-/* When a recurring task is marked complete, push its due date out by the recurrence period and re-activate it. */
 function encodeDateObj(d){if(state.dueIsDateTime)return new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0).getTime()/1000;return Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/1000;}
-function autoResetRecurring(){
-  if(!state.haveGrist||!state.mapped.Recurrence||!state.mapped.Status||!state.mapped.DueDate)return;
+async function createTask(fields){
+  try{return await grist.selectedTable.create({fields:fields});}
+  catch(e){try{const tid=await grist.selectedTable.getTableId();return await grist.docApi.applyUserActions([["AddRecord",tid,null,fields]]);}
+  catch(e2){console.error(e2);alert("Could not create the task. The widget needs full (read & write) access.");}}
+}
+/* Recurrence: only when a task transitions open -> complete, spawn one identical task N days out. */
+function processRecurrence(){
+  if(!state.haveGrist){return;}
+  const ready=state.snapshotReady, canSpawn=state.mapped.Recurrence&&state.mapped.DueDate&&state.mapped.Status;
   const today=new Date();
-  state.records.forEach(r=>{
-    const rec=parseRecurrence(r.recurrence);
-    if(!rec||!isComplete(r)||state.resetting.has(r.id))return;
-    state.resetting.add(r.id);
-    const next=addInterval(today,rec);             // designated period out from completion
-    const fields={};fields[state.cols.DueDate]=encodeDateObj(next);fields[state.cols.Status]=state.resetStatus||null;
-    Promise.resolve(grist.selectedTable.update({id:r.id,fields:fields})).catch(()=>{}).then(()=>{state.resetting.delete(r.id);});
-  });
+  if(ready&&canSpawn){
+    state.records.forEach(r=>{
+      const days=parseRecurDays(r.recurrence);
+      if(!days)return;
+      const doneNow=isComplete(r);
+      const wasOpen=state.prevComplete[r.id]===false;   // was explicitly open last we saw it
+      if(doneNow&&wasOpen&&!state.spawning.has(r.id)){
+        state.spawning.add(r.id);
+        const fields={};
+        fields[state.cols.DueDate]=encodeDateObj(addCalendarDays(today,days));
+        if(state.cols.Title)fields[state.cols.Title]=r.title;
+        if(state.cols.Project&&r.project!==null&&r.project!==undefined)fields[state.cols.Project]=r.project;
+        if(state.cols.Category&&r.category!==null&&r.category!==undefined)fields[state.cols.Category]=r.category;
+        if(state.cols.Priority&&r.priority!==null&&r.priority!==undefined)fields[state.cols.Priority]=r.priority;
+        if(state.cols.Description&&r.description!==null&&r.description!==undefined)fields[state.cols.Description]=r.description;
+        if(state.cols.Recurrence)fields[state.cols.Recurrence]=days;                 // carry recurrence forward
+        if(state.cols.AssignedDate)fields[state.cols.AssignedDate]=encodeDateObj(today);
+        // Status intentionally omitted -> the new task starts active
+        Promise.resolve(createTask(fields)).catch(()=>{}).then(()=>{state.spawning.delete(r.id);});
+      }
+    });
+  }
+  // refresh snapshot of which tasks are complete (used to detect the next transition)
+  const snap={};state.records.forEach(r=>{snap[r.id]=isComplete(r);});
+  state.prevComplete=snap;state.snapshotReady=true;
 }
 
 /* ===================== Queue logic ===================== */
@@ -308,14 +333,20 @@ function queueList(){return sortQueue(state.records.filter(eligible));}
 function render(){
   const root=document.getElementById("root");root.innerHTML="";
   if(!state.haveGrist){root.innerHTML='<div class="notice"><h2>Open this inside Grist</h2><p>Add it as a custom widget on your tasks table, grant <b>Full</b> access, and map the columns.</p></div>';return;}
-  root.appendChild(Object.assign(el("h1"),{textContent:"My Work Queue"}));
+  const head=el("div","head");
+  head.appendChild(Object.assign(el("h1"),{textContent:"My Work Queue"}));
+  const newBtn=el("button","newbtn");newBtn.textContent="\uFF0B New task";
+  newBtn.onclick=()=>{state.creating=true;state.newDraft=null;render();};
+  head.appendChild(newBtn);
+  root.appendChild(head);
   root.appendChild(Object.assign(el("p","sub"),{textContent:"Your personal tasks \u2014 filter by project and work through a few at a time."}));
 
   if(!state.mapped.DueDate||!state.mapped.Title){
     const c=el("div","controls");
-    c.innerHTML="<b>Map your columns.</b> This widget needs at least <b>Due Date</b> and <b>Title</b>. Optional: <b>Project</b> (assign/filter by project), <b>Recurrence</b> (auto-repeat on completion), Assigned Date, Status, Category, Priority, Description.";
+    c.innerHTML="<b>Map your columns.</b> This widget needs at least <b>Due Date</b> and <b>Title</b>. Optional: <b>Project</b> (assign/filter by project), <b>Recurrence</b> (repeat on completion), Assigned Date, Status, Category, Priority, Description.";
     root.appendChild(c);return;
   }
+  if(state.creating)root.appendChild(newTaskForm());
   root.appendChild(controls());
 
   const all=queueList();
@@ -327,7 +358,17 @@ function render(){
   root.appendChild(meta);
 
   const q=el("div","queue");
-  if(!shown.length)q.appendChild(Object.assign(el("div","empty"),{textContent:all.length?"Increase the number to show more.":"Nothing open here \u2014 try another project or timing filter."}));
+  if(!shown.length){
+    const total=state.records.length;
+    const withDue=state.records.filter(r=>r.due).length;
+    const open=state.records.filter(r=>r.due&&!isDoneOrCancelled(r)).length;
+    let msg;
+    if(total===0) msg="No rows are reaching this widget. Check that it's added on the table that actually holds your tasks, and that this widget's access is set to \u201cFull\u201d in the creator panel (the gear \u2192 Access).";
+    else if(withDue===0) msg=total+" task"+(total===1?"":"s")+" found in this table, but none have a value in the mapped Due Date column. This queue only shows tasks that have a due date \u2014 add dates, or check that Due Date is mapped to the right column.";
+    else if(open===0) msg="All "+withDue+" dated task"+(withDue===1?"":"s")+" here are marked complete or cancelled.";
+    else msg="No tasks match the current project/timing filters \u2014 clear the project chips or set timing to \u201cAll.\u201d";
+    q.appendChild(Object.assign(el("div","empty"),{textContent:msg}));
+  }
   else shown.forEach(r=>q.appendChild(taskCard(r)));
   root.appendChild(q);
 }
@@ -384,18 +425,61 @@ function controls(){
   st.append(minus,nspan,plus);cfrow.appendChild(st);
   cf.appendChild(cfrow);row.appendChild(cf);
 
-  // Recurrence reset status (only meaningful when both Recurrence and Status are mapped)
-  if(state.mapped.Recurrence&&state.mapped.Status){
-    const rf=el("div","field");rf.appendChild(Object.assign(el("div","ctl-label"),{textContent:"On repeat, reset status to"}));
-    const rsel=document.createElement("select");rsel.className="sortsel";
-    rsel.appendChild(opt("","\u2014 clear status \u2014",state.resetStatus===""));
-    statusOptions().forEach(s=>rsel.appendChild(opt(s,s,s===state.resetStatus)));
-    rsel.onchange=()=>{state.resetStatus=rsel.value;persist();};
-    rf.appendChild(rsel);row.appendChild(rf);
-  }
-
   c.appendChild(row);
   return c;
+}
+
+/* ----- create a new task directly from the widget ----- */
+function nfLine(labelText){const r=el("div","nrow");r.appendChild(Object.assign(el("label"),{textContent:labelText}));return r;}
+function newTaskForm(){
+  const d=state.newDraft||(state.newDraft={date:iso(new Date()),time:"09:00",title:"",project:"",status:"",category:"",priority:"",priBool:false,recur:"",description:""});
+  const box=el("div","controls newform");
+  box.appendChild(Object.assign(el("div","ctl-label"),{textContent:"New task"}));
+  // Title
+  {const r=nfLine("Title");const i=document.createElement("input");i.type="text";i.className="ntf";i.placeholder="What needs doing";i.value=d.title;i.oninput=()=>d.title=i.value;r.appendChild(i);box.appendChild(r);}
+  // Due (+ time)
+  {const r=nfLine("Due");const di=document.createElement("input");di.type="date";di.className="ntf small";di.value=d.date;di.oninput=()=>d.date=di.value;r.appendChild(di);
+   if(state.dueIsDateTime){const ti=document.createElement("input");ti.type="time";ti.className="ntf small";ti.value=d.time;ti.oninput=()=>d.time=ti.value;r.appendChild(ti);}box.appendChild(r);}
+  // Project
+  if(state.mapped.Project){const r=nfLine("Project");const i=document.createElement("input");i.type="text";i.className="ntf";i.placeholder="Project";i.value=d.project;i.oninput=()=>d.project=i.value;i.setAttribute("list","ntf-projects");r.appendChild(i);
+   const dl=document.createElement("datalist");dl.id="ntf-projects";uniqSorted([].concat.apply([],state.records.map(recProj))).filter(v=>v!==NO_PROJECT).forEach(p=>dl.appendChild(Object.assign(el("option"),{value:p})));r.appendChild(dl);box.appendChild(r);}
+  // Status
+  if(state.mapped.Status){const r=nfLine("Status");const s=document.createElement("select");s.className="ntf small";s.appendChild(opt("","\u2014 none \u2014",d.status===""));statusOptions().forEach(v=>s.appendChild(opt(v,v,v===d.status)));s.onchange=()=>d.status=s.value;r.appendChild(s);box.appendChild(r);}
+  // Category
+  if(state.mapped.Category){const r=nfLine("Category");const i=document.createElement("input");i.type="text";i.className="ntf";i.placeholder="Category";i.value=d.category;i.oninput=()=>d.category=i.value;i.setAttribute("list","ntf-cats");r.appendChild(i);
+   const dl=document.createElement("datalist");dl.id="ntf-cats";uniqSorted([].concat.apply([],state.records.map(recCats))).filter(v=>v!==NO_CAT).forEach(p=>dl.appendChild(Object.assign(el("option"),{value:p})));r.appendChild(dl);box.appendChild(r);}
+  // Priority
+  if(state.mapped.Priority){const r=nfLine("Priority");
+   if(state.priIsBool){const lab=document.createElement("label");lab.style.cssText="text-transform:none;letter-spacing:0;min-width:0;display:flex;gap:6px;align-items:center;";const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!d.priBool;cb.onchange=()=>d.priBool=cb.checked;lab.append(cb,document.createTextNode("Important"));r.appendChild(lab);}
+   else{const i=document.createElement("input");i.type="text";i.className="ntf small";i.placeholder="e.g. High";i.value=d.priority;i.oninput=()=>d.priority=i.value;r.appendChild(i);}box.appendChild(r);}
+  // Recurrence
+  if(state.mapped.Recurrence){const r=nfLine("Repeat");const i=document.createElement("input");i.type="number";i.min="1";i.className="ntf small";i.placeholder="days";i.value=d.recur;i.oninput=()=>d.recur=i.value;r.appendChild(i);r.appendChild(Object.assign(el("span"),{textContent:"days (blank = no repeat)"}));box.appendChild(r);}
+  // Description
+  if(state.mapped.Description){const r=nfLine("Note");const t=document.createElement("textarea");t.className="ntf";t.style.minHeight="52px";t.value=d.description;t.oninput=()=>d.description=t.value;r.appendChild(t);box.appendChild(r);}
+  // Actions
+  const acts=el("div","nform-actions");
+  const save=el("button","fe-save");save.textContent="Create task";save.onclick=submitNewTask;
+  const cancel=el("button","fe-cancel");cancel.textContent="Cancel";cancel.onclick=()=>{state.creating=false;state.newDraft=null;render();};
+  acts.append(save,cancel);box.appendChild(acts);
+  return box;
+}
+function submitNewTask(){
+  const d=state.newDraft||{};
+  if(!d.title||!d.title.trim()){alert("Give the task a title.");return;}
+  if(!d.date){alert("Pick a due date.");return;}
+  const fields={};
+  fields[state.cols.Title]=d.title.trim();
+  fields[state.cols.DueDate]=encodeDue(d.date,state.dueIsDateTime?(d.time||"09:00"):null);
+  if(state.mapped.Project&&d.project&&d.project.trim())fields[state.cols.Project]=d.project.trim();
+  if(state.mapped.Status&&d.status)fields[state.cols.Status]=d.status;
+  if(state.mapped.Category&&d.category&&d.category.trim())fields[state.cols.Category]=encodeMulti([d.category.trim()],state.catMulti);
+  if(state.mapped.Priority){if(state.priIsBool){if(d.priBool)fields[state.cols.Priority]=true;}else if(d.priority&&d.priority.trim()){let v=d.priority.trim();if(!isNaN(Number(v)))v=Number(v);fields[state.cols.Priority]=v;}}
+  if(state.mapped.Recurrence){const n=parseInt(d.recur,10);if(n>=1)fields[state.cols.Recurrence]=n;}
+  if(state.mapped.Description&&d.description&&d.description.trim())fields[state.cols.Description]=d.description.trim();
+  if(state.mapped.AssignedDate)fields[state.cols.AssignedDate]=encodeDateObj(new Date());
+  state.creating=false;state.newDraft=null;
+  Promise.resolve(createTask(fields)).catch(()=>{});
+  render();
 }
 
 /* ----- task card (editable, like the calendar's line items) ----- */
@@ -435,9 +519,9 @@ function taskCard(r){
     tags.appendChild(makeEditChip(state.priIsBool?important:hasPri,"\uFF0B priority","Edit priority",()=>openInlineEditor("pri",r.id)));
   }
   if(state.mapped.Recurrence&&!editingRec){
-    const rec=parseRecurrence(r.recurrence);
-    if(rec)tags.appendChild(Object.assign(el("span","tag recur"),{textContent:"\u21BB "+fmtRecurrence(rec)}));
-    tags.appendChild(makeEditChip(!!rec,"\uFF0B repeat","Set recurrence",()=>openInlineEditor("rec",r.id)));
+    const days=parseRecurDays(r.recurrence);
+    if(days)tags.appendChild(Object.assign(el("span","tag recur"),{textContent:"\u21BB "+fmtRecurDays(days)}));
+    tags.appendChild(makeEditChip(!!days,"\uFF0B repeat","Set recurrence",()=>openInlineEditor("rec",r.id)));
   }
   if(tags.children.length)main.appendChild(tags);
 
@@ -528,16 +612,14 @@ function fieldEditShell(){const ed=el("div","fieldedit");["click","mousedown"].f
 function projEditor(r){const ed=fieldEditShell();const known=uniqSorted([].concat.apply([],state.records.map(recProj))).filter(v=>v!==NO_PROJECT);const p=buildTagPicker(recProj(r).filter(v=>v!==NO_PROJECT),false,known,"project");ed.appendChild(p.element);ed.appendChild(feActions(()=>{state.editingProjRow=null;setProject(r.id,p.get());render();},()=>{state.editingProjRow=null;render();}));return ed;}
 function recEditor(r){
   const ed=fieldEditShell();
-  const cur=parseRecurrence(r.recurrence);
+  const cur=parseRecurDays(r.recurrence);
   const line=el("div");line.style.cssText="display:flex;gap:6px;align-items:center;flex-wrap:wrap;";
   line.appendChild(Object.assign(el("span"),{textContent:"Repeat every"}));
-  const num=document.createElement("input");num.type="number";num.min="1";num.max="365";num.value=cur?cur.n:1;num.style.cssText="width:64px;font:inherit;padding:5px 6px;border:1px solid var(--line-strong);border-radius:6px;";
-  const usel=document.createElement("select");usel.style.cssText="font:inherit;padding:5px 6px;border:1px solid var(--line-strong);border-radius:6px;";
-  [["day","days"],["week","weeks"],["month","months"],["year","years"]].forEach(o=>usel.appendChild(opt(o[0],o[1],cur?cur.unit===o[0]:o[0]==="week")));
-  line.append(num,usel);ed.appendChild(line);
-  const hint=el("div");hint.style.cssText="font-size:11px;color:var(--ink-faint);";hint.textContent="When marked complete, the task re-opens this far in the future.";ed.appendChild(hint);
+  const num=document.createElement("input");num.type="number";num.min="1";num.max="3650";num.value=cur||14;num.style.cssText="width:72px;font:inherit;padding:5px 6px;border:1px solid var(--line-strong);border-radius:6px;";
+  line.append(num,Object.assign(el("span"),{textContent:"days"}));ed.appendChild(line);
+  const hint=el("div");hint.style.cssText="font-size:11px;color:var(--ink-faint);";hint.textContent="When you complete this task, a new copy is created this many days out.";ed.appendChild(hint);
   const acts=el("div","fe-actions");
-  const save=el("button","fe-save");save.textContent="Save";save.onclick=()=>{const n=parseInt(num.value,10);state.editingRecRow=null;if(n>=1)setRecurrence(r.id,recStr(n,usel.value));render();};
+  const save=el("button","fe-save");save.textContent="Save";save.onclick=()=>{const n=parseInt(num.value,10);state.editingRecRow=null;if(n>=1)setRecurrence(r.id,n);render();};
   const off=el("button","fe-cancel");off.textContent="Not recurring";off.onclick=()=>{state.editingRecRow=null;setRecurrence(r.id,null);render();};
   const cancel=el("button","fe-cancel");cancel.textContent="Cancel";cancel.onclick=()=>{state.editingRecRow=null;render();};
   acts.append(save,off,cancel);ed.appendChild(acts);return ed;
@@ -573,9 +655,9 @@ if(state.haveGrist){
     {name:"DueDate",title:"Due Date",type:"Date,DateTime"},
     {name:"Title",title:"Title",type:"Any"},
     {name:"Project",title:"Project",type:"Choice,Text",optional:true,description:"The project each task belongs to \u2014 used for the project filter and editable per task."},
-    {name:"Recurrence",title:"Recurrence",type:"Text",optional:true,description:"e.g. \"2 weeks\". A completed recurring task auto-reopens this far in the future. Requires Status."},
+    {name:"Recurrence",title:"Recurrence",type:"Int,Numeric,Text,Any",optional:true,description:"Number of days. When a task with a recurrence is completed, a new identical task is created that many days out. Requires Status (to detect completion)."},
     {name:"AssignedDate",title:"Assigned Date",type:"Date,DateTime",optional:true,description:"When the task was assigned \u2014 enables the 'sort by assigned date' option."},
-    {name:"Status",title:"Status",type:"Choice,Text",optional:true,description:"Complete/cancelled tasks drop out of the queue; needed for recurring resets."},
+    {name:"Status",title:"Status",type:"Choice,Text",optional:true,description:"Complete/cancelled tasks drop out of the queue; needed to trigger recurring tasks."},
     {name:"Category",title:"Category",type:"Choice,ChoiceList,Text",optional:true},
     {name:"Priority",title:"Priority",type:"Any",optional:true},
     {name:"Description",title:"Description",type:"Text,Any",optional:true},
@@ -587,10 +669,9 @@ if(state.haveGrist){
     if(typeof o.count==="number")state.count=Math.max(1,Math.min(10,o.count));
     if(typeof o.limit==="boolean")state.limit=o.limit;
     if(o.randSeed)state.randSeed=o.randSeed;
-    if(typeof o.resetStatus==="string")state.resetStatus=o.resetStatus;
     render();
   });
-  grist.onRecords((records,mappings)=>{ingest(records,mappings);autoResetRecurring();render();if(!state.typesChecked&&state.cols.DueDate){state.typesChecked=true;detectColumnTypes();}});
+  grist.onRecords((records,mappings)=>{ingest(records,mappings);try{processRecurrence();}catch(e){console.error("recurrence check skipped:",e);}render();if(!state.typesChecked&&state.cols.DueDate){state.typesChecked=true;detectColumnTypes();}});
 }
 render();
 </script>
