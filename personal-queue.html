@@ -25,6 +25,10 @@
   .notice h2{font-family:var(--display);color:var(--ink);}
 
   .controls{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .clearbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 10px;margin-bottom:10px;background:var(--accent-soft);border:1px solid #cfe5df;border-radius:7px;}
+  .clearbar-txt{font-size:12px;color:var(--accent);font-weight:500;}
+  .clearlink{border:0;background:transparent;color:var(--accent);font:inherit;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;padding:2px 4px;white-space:nowrap;}
+  .clearlink:hover{color:var(--ink);}
   .ctl-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin:10px 0 5px;}
   .ctl-label:first-child{margin-top:0;}
   .people{display:flex;flex-wrap:wrap;gap:6px;}
@@ -50,6 +54,126 @@
   .field{display:flex;flex-direction:column;}
 
   .meta{color:var(--ink-faint);font-size:12px;margin:14px 2px 6px;}
+
+  /* --- stats strip --- */
+  .stats{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px;}
+  .stat{font:inherit;font-size:11.5px;color:var(--ink-soft);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:3px 11px;cursor:pointer;transition:transform .06s,box-shadow .12s;}
+  .stat b{color:var(--ink);font-variant-numeric:tabular-nums;}
+  .stat:hover:not(:disabled){border-color:var(--accent);box-shadow:0 1px 4px rgba(20,40,38,.10);}
+  .stat:active:not(:disabled){transform:translateY(1px);}
+  .stat:disabled{cursor:default;opacity:.55;}
+  .stat.stat-warn{background:var(--warn-soft);border-color:#e6d0a0;color:#7a5410;} .stat.stat-warn b{color:#7a5410;}
+  .stat.stat-crit{background:#fbe3de;border-color:#e8b4a8;color:#8f2c15;} .stat.stat-crit b{color:#8f2c15;}
+  /* active view */
+  .stat.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;box-shadow:0 1px 5px rgba(26,127,107,.32);}
+  .stat.on b{color:#fff;}
+  .stat.on.stat-warn{background:#9a6b12;border-color:#9a6b12;} .stat.on.stat-warn b{color:#fff;}
+  .stat.on.stat-crit{background:#8f2c15;border-color:#8f2c15;color:#fff;} .stat.on.stat-crit b{color:#fff;}
+  .stat.on::after{content:" \2715";opacity:.75;font-size:10px;}
+
+  /* --- search --- */
+  .searchwrap{position:relative;margin-bottom:10px;}
+  .searchinput{width:100%;font:inherit;padding:8px 30px 8px 11px;border:1px solid var(--line-strong);border-radius:8px;background:#fff;}
+  .searchinput:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .searchclear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--ink-faint);cursor:pointer;font-size:13px;padding:3px 5px;border-radius:5px;}
+  .searchclear:hover{background:#eef1ef;color:var(--ink);}
+
+  /* --- bulk bar --- */
+  .bulkbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--accent);color:#fff;border-radius:8px;padding:8px 12px;margin:10px 0;
+           position:sticky;top:var(--headh,0px);z-index:44;box-shadow:0 3px 12px -4px rgba(26,127,107,.5);}
+  .bulk-count{font-size:12px;font-weight:600;white-space:nowrap;}
+  .bulk-acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .bulkbtn{border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.14);color:#fff;border-radius:6px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap;}
+  .bulkbtn:hover{background:rgba(255,255,255,.28);}
+  .bulkbtn.bulk-danger{background:rgba(0,0,0,.18);border-color:rgba(255,255,255,.35);}
+  .bulkbtn.bulk-danger:hover{background:var(--red);border-color:var(--red);}
+  .bulkbtn.bulk-plain{background:transparent;border-color:rgba(255,255,255,.35);}
+  .bulksel{font:inherit;font-size:12px;padding:4px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.14);color:#fff;cursor:pointer;}
+  .bulksel option{color:var(--ink);}
+
+  /* --- row checkbox --- */
+  .cbwrap{flex:none;padding-top:2px;}
+  .rowcb{cursor:pointer;width:15px;height:15px;accent-color:var(--accent);}
+
+  /* --- graduated overdue intensity --- */
+  .row.od1{border-left-color:#e8a87c!important;background:#fff9f5;}
+  .row.od2{border-left-color:#dd7f52!important;background:#fdf0e8;}
+  .row.od3{border-left-color:var(--red)!important;background:#fbe8e3;}
+  .row.od4{border-left-color:#8f2c15!important;background:#f8ddd6;border-left-width:6px;box-shadow:inset 3px 0 0 rgba(143,44,21,.25);}
+  .row.pinned{border-color:#e0a99b;}
+  .badge.over.od1{background:#e8a87c;color:#5c3418;}
+  .badge.over.od2{background:#dd7f52;color:#fff;}
+  .badge.over.od3{background:var(--red);color:#fff;}
+  .badge.over.od4{background:#8f2c15;color:#fff;letter-spacing:.04em;font-weight:700;}
+  .badge.pin{background:#fff;color:#8f2c15;border:1px solid #e0a99b;font-weight:600;}
+
+  /* --- days to complete / runway --- */
+  .dtc{display:block;margin-top:3px;font-size:10.5px;font-variant-numeric:tabular-nums;border:1px dashed var(--line-strong);background:#fff;color:var(--ink-soft);border-radius:5px;padding:1px 5px;cursor:pointer;white-space:nowrap;font-family:inherit;width:100%;text-align:left;}
+  .dtc:hover{border-color:var(--accent);color:var(--accent);border-style:solid;}
+  .dtc.unset{color:var(--ink-faint);opacity:.7;}
+  .dtc.atrisk{background:var(--warn-soft);border-color:#e6d0a0;border-style:solid;color:#7a5410;font-weight:600;}
+  .runway{margin-top:2px;font-size:10px;font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:2px;}
+  .runway.ok{color:var(--ink-faint);}
+  .runway.tight{color:#7a5410;font-weight:600;}
+  .runway.short{color:var(--red);font-weight:700;}
+  .runway.over{color:var(--red);font-weight:600;}
+  .dtc-hd{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);}
+  .dateeditor input[type=number]{font:inherit;padding:5px 6px;border:1px solid var(--line-strong);border-radius:6px;}
+  .badge.risk{background:var(--warn-soft);color:#7a5410;border:1px solid #e6d0a0;font-weight:600;}
+
+  /* --- undo toast --- */
+  .toast{position:sticky;bottom:12px;display:flex;align-items:center;gap:10px;margin:14px auto 0;max-width:440px;
+         background:var(--ink);color:#fff;border-radius:9px;padding:9px 12px;box-shadow:0 4px 18px rgba(20,40,38,.28);z-index:80;}
+  .toast-txt{flex:1;font-size:12.5px;}
+  .toast-undo{border:1px solid rgba(255,255,255,.55);background:transparent;color:#fff;border-radius:6px;padding:4px 12px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;}
+  .toast-undo:hover{background:rgba(255,255,255,.18);}
+  .toast-x{border:0;background:transparent;color:rgba(255,255,255,.65);cursor:pointer;font-size:12px;padding:2px 4px;}
+  .toast-x:hover{color:#fff;}
+
+  /* --- duplicate --- */
+  .dupbtn{flex:none;border:0;background:transparent;color:var(--ink-faint);font-size:14px;padding:4px 6px;cursor:pointer;border-radius:6px;opacity:.45;line-height:1;}
+  .dupbtn:hover{background:var(--accent-soft);color:var(--accent);opacity:1;}
+
+  /* --- sticky header: stats + search + filters pin together --- */
+  .stickyhead{position:sticky;top:0;z-index:45;background:var(--bg);
+              padding-top:6px;margin:0 -16px;padding-left:16px;padding-right:16px;
+              border-bottom:1px solid transparent;transition:border-color .15s,box-shadow .15s;}
+  .stickyhead.stuck{border-bottom-color:var(--line);box-shadow:0 4px 12px -6px rgba(20,40,38,.18);}
+  .stickyhead .stats{margin-top:0;}
+  .stickyhead.collapsed .searchwrap,
+  .stickyhead.collapsed .controls{display:none;}
+  .headtoggle{display:flex;justify-content:flex-end;margin:-2px 0 6px;}
+  .headtoggle button{border:0;background:transparent;color:var(--ink-faint);font:inherit;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:5px;}
+  .headtoggle button:hover{background:var(--panel);color:var(--accent);}
+
+  /* --- actionable empty state --- */
+  .empty-acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;}
+
+  /* --- focus-visible (a11y) --- */
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  /* --- keyboard focus --- */
+  .row.kfocus{outline:2px solid var(--accent);outline-offset:1px;}
+
+  /* --- snooze --- */
+  .snoozewrap{position:relative;flex:none;}
+  .snoozebtn{border:0;background:transparent;color:var(--ink-faint);font-size:14px;padding:4px 6px;cursor:pointer;border-radius:6px;opacity:.5;line-height:1;}
+  .snoozebtn:hover{background:var(--accent-soft);color:var(--accent);opacity:1;}
+  .snoozemenu{position:absolute;top:calc(100% + 4px);right:0;z-index:60;background:#fff;border:1px solid var(--line-strong);border-radius:8px;box-shadow:var(--shadow);min-width:140px;padding:4px;}
+
+  /* --- shuffle --- */
+  .shuffle.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .shuffle:disabled{opacity:.4;cursor:not-allowed;}
+  .shuffle-off{border:1px solid var(--line-strong);background:#fff;border-radius:var(--radius);padding:6px 9px;cursor:pointer;font:inherit;color:var(--ink-faint);}
+  .shuffle-off:hover{background:var(--red-soft);color:var(--red);border-color:var(--red);}
+
+  /* --- help --- */
+  .hkbtn{border:1px solid var(--line-strong);background:#fff;color:var(--ink-soft);border-radius:50%;width:26px;height:26px;font:inherit;font-weight:600;cursor:pointer;line-height:1;}
+  .hkbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .helppanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+  .helpgrid{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;}
+  .helpgrid kbd{background:#fff;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 7px;font:inherit;font-size:11px;font-weight:600;color:var(--ink);white-space:nowrap;text-align:center;}
+  .helpgrid span{font-size:12px;color:var(--ink-soft);}
   .head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .head-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .demobadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--warn-soft);color:var(--warn);border:1px solid #e6d0a0;letter-spacing:.03em;white-space:nowrap;}
@@ -90,7 +214,13 @@
   .tag.cat{color:#fff;} .tag.asg::before{content:"@";opacity:.6;margin-right:1px;}
   .tag.proj{background:#eaf0fa;color:#3a5d92;border:1px solid #cdddf2;} .tag.proj::before{content:"\25C8";opacity:.7;margin-right:3px;}
   .tag.recur{background:#eef3f1;color:var(--accent);border:1px solid #cfe5df;}
-  .tag.pri{border:1px solid var(--line-strong);background:#fff;} .tag.pri.imp{background:var(--red-soft);border-color:#e6b3a8;color:var(--red);font-weight:600;}
+  .tag.pri{border:1px solid var(--line-strong);background:#fff;font-weight:600;}
+  .tag.pri.pri-high{background:var(--red-soft);border-color:#e6b3a8;color:var(--red);}
+  .tag.pri.pri-medium{background:var(--warn-soft);border-color:#e6d0a0;color:#7a5410;}
+  .tag.pri.pri-low{background:#eef3f1;border-color:#cfe0da;color:var(--ink-soft);font-weight:500;}
+  .pchip.pri-high.sel{background:var(--red);border-color:var(--red);}
+  .pchip.pri-medium.sel{background:#b8860b;border-color:#b8860b;}
+  .pchip.pri-low.sel{background:var(--ink-soft);border-color:var(--ink-soft);}
   .tag.editchip{background:#fff;border:1px dashed var(--line-strong);color:var(--ink-faint);cursor:pointer;} .tag.editchip:hover{color:var(--accent);border-color:var(--accent);}
   .row .desc{font-size:12px;color:var(--ink-soft);margin-top:6px;white-space:pre-wrap;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;}
   .row .desc.full{display:block;-webkit-line-clamp:none;overflow:visible;}
@@ -134,18 +264,34 @@ const state = {
   choiceStatus: [], choiceCategory: [], choiceProject: [],  // canonical lists from Grist column metadata
   typesChecked: false,
   // queue settings (persisted)
-  projects: [], timing: "all", sort: "due", count: 5, limit: true, randSeed: "seed1", upWindow: 0,
+  projects: [], categories: [], timing: "all", sort: "due", count: 5, limit: true, randSeed: "seed1", upWindow: 0,
+  search: "", shuffled: false, showHelp: false, statView: null, headCollapsed: false,
+  selected: new Set(),          // bulk-action selection
+  focusIdx: -1,                 // keyboard cursor
   // transient editor state
-  openStatusRow: null, openDateRow: null, editingDescRow: null, editingCatRow: null, editingPriRow: null, editingProjRow: null, editingRecRow: null, editingTitleRow: null,
+  openStatusRow: null, openDateRow: null, openSnoozeRow: null, openDtcRow: null, editingDescRow: null, editingCatRow: null, editingPriRow: null, editingProjRow: null, editingRecRow: null, editingTitleRow: null,
   expandedRows: new Set(),
   creating: false, newDraft: null,            // "New task" form
+  undo: null, undoTimer: null,                // undo toast
   prevComplete: {}, snapshotReady: false, spawning: new Set(), // recurrence: spawn on open->complete transition
 };
 const COMPLETE_WORDS = new Set(["complete","completed","done","closed","resolved","finished"]);
 const CANCEL_WORDS = new Set(["cancelled","canceled","void","withdrawn","dismissed"]);
 const READY_WORDS = new Set(["ready"]);
 const NO_CAT="(No category)", NO_PROJECT="(No project)";
-const PRI_WORDS={"highest":0,"critical":0,"urgent":0,"emergency":0,"p0":0,"high":1,"p1":1,"important":1,"medium":2,"normal":2,"med":2,"moderate":2,"standard":2,"p2":2,"low":3,"p3":3,"lowest":4,"p4":4,"none":5};
+const PRIORITIES=["High","Medium","Low"];              // fixed set — no additions
+const PRI_RANK={"high":0,"medium":1,"med":1,"normal":1,"low":2};
+function normPriority(v){
+  if(v===null||v===undefined||v==="")return null;
+  if(v===true)return "High"; if(v===false)return null;   // tolerate a legacy Bool column
+  const s=String(v).trim().toLowerCase();
+  if(s==="")return null;
+  if(s==="high"||s==="highest"||s==="urgent"||s==="critical"||s==="important"||s==="p0"||s==="p1"||s==="1")return "High";
+  if(s==="medium"||s==="med"||s==="normal"||s==="moderate"||s==="standard"||s==="p2"||s==="2")return "Medium";
+  if(s==="low"||s==="lowest"||s==="p3"||s==="p4"||s==="3")return "Low";
+  return null;                                            // anything else is treated as unset
+}
+function priorityRank(v){const p=normPriority(v);return p===null?Infinity:PRI_RANK[p.toLowerCase()];}
 const CAT_COLORS=["#1a7f6b","#3a6ea5","#b4452f","#8a5a9c","#a8762a","#2f7d8a","#7a8c2e","#9c4f6b","#4a5d8a","#6b8e23"];
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -166,15 +312,6 @@ function parseDue(v){
   return{y:d.getUTCFullYear(),mo:d.getUTCMonth(),d:d.getUTCDate(),minuteOfDay:-1,timed:false,timeStr:null,raw:v};
 }
 function toList(v){if(v===null||v===undefined||v==="")return[];if(Array.isArray(v)){const items=v[0]==="L"?v.slice(1):v;return items.filter(x=>x!==null&&x!=="").map(String);}return[String(v)];}
-function priorityRank(v){
-  if(v===null||v===undefined||v==="")return{num:Infinity,str:""};
-  if(v===true)return{num:0,str:""}; if(v===false)return{num:6,str:""};
-  if(typeof v==="number")return{num:v,str:""};
-  const s=String(v).trim().toLowerCase();
-  if(s==="true"||s==="yes"||s==="y")return{num:0,str:s}; if(s==="false"||s==="no"||s==="n")return{num:6,str:s};
-  if(s in PRI_WORDS)return{num:PRI_WORDS[s],str:s};
-  const n=parseFloat(s); if(!isNaN(n))return{num:n,str:s}; return{num:1000,str:s};
-}
 function catColor(label){let h=0;for(let i=0;i<label.length;i++)h=(h*31+label.charCodeAt(i))>>>0;return CAT_COLORS[h%CAT_COLORS.length];}
 function uniqSorted(a){return Array.from(new Set(a)).sort((x,y)=>x.localeCompare(y));}
 
@@ -192,7 +329,7 @@ function statusStr(r){return (r.status===null||r.status===undefined)?"":String(r
 function isComplete(r){return state.mapped.Status&&COMPLETE_WORDS.has(statusStr(r));}
 function isReady(r){return state.mapped.Status&&READY_WORDS.has(statusStr(r));}
 function isCancelled(r){return state.mapped.Status&&CANCEL_WORDS.has(statusStr(r));}
-function isImportant(v){if(v===null||v===undefined||v==="")return false;return priorityRank(v).num<=1;}
+function isImportant(v){return normPriority(v)==="High";}
 function isCritical(r){if(state.mapped.Priority&&isImportant(r.priority))return true;return false;}
 function classify(r){if(isComplete(r))return "complete";if(isReady(r))return "ready";if(isCritical(r))return "critical";return "normal";}
 function stripeColor(r,kind){
@@ -214,7 +351,7 @@ function pick(rec,m,k){const real=m?m[k]:null;if(real===undefined||real===null)r
 function ingest(records,mappings){
   mappings=mappings||{};
   state.cols={DueDate:mappings.DueDate||null,Title:mappings.Title||null,Project:mappings.Project||null,AssignedDate:mappings.AssignedDate||null,
-    Category:mappings.Category||null,Priority:mappings.Priority||null,Status:mappings.Status||null,Description:mappings.Description||null,Recurrence:mappings.Recurrence||null};
+    Category:mappings.Category||null,Priority:mappings.Priority||null,Status:mappings.Status||null,Description:mappings.Description||null,Recurrence:mappings.Recurrence||null,DaysToComplete:mappings.DaysToComplete||null,CompletedDate:mappings.CompletedDate||null};
   state.mapped={};Object.keys(state.cols).forEach(k=>state.mapped[k]=!!state.cols[k]);
   const out=[];let anyTimed=false,anyCatList=false,anyPriBool=false;
   (records||[]).forEach(rec=>{
@@ -224,7 +361,6 @@ function ingest(records,mappings){
     const dv=pick(rec,mappings,"DueDate");
     if(typeof dv==="number"&&dv%86400!==0)anyTimed=true;
     if(state.mapped.Category&&Array.isArray(pick(rec,mappings,"Category")))anyCatList=true;
-    if(state.mapped.Priority&&typeof pick(rec,mappings,"Priority")==="boolean")anyPriBool=true;
     out.push({id:rec.id,due:due,
       assignedRaw:(typeof asgRaw==="number")?asgRaw:(asgDate?asgDate.raw:null),assignedDate:asgDate,
       title:pick(rec,mappings,"Title"),
@@ -233,7 +369,9 @@ function ingest(records,mappings){
       priority:state.mapped.Priority?pick(rec,mappings,"Priority"):null,
       status:state.mapped.Status?pick(rec,mappings,"Status"):null,
       description:state.mapped.Description?pick(rec,mappings,"Description"):null,
-      recurrence:state.mapped.Recurrence?pick(rec,mappings,"Recurrence"):null});
+      recurrence:state.mapped.Recurrence?pick(rec,mappings,"Recurrence"):null,
+      daysToComplete:state.mapped.DaysToComplete?pick(rec,mappings,"DaysToComplete"):null,
+      completedDate:state.mapped.CompletedDate?parseDue(pick(rec,mappings,"CompletedDate")):null});
   });
   state.records=out;
   if(state.dueTypeFromMeta===null)state.dueIsDateTime=out.some(r=>r.due&&r.due.timed);
@@ -260,7 +398,6 @@ async function detectColumnTypes(){
     const isList=t=>t.indexOf("ChoiceList")===0||t.indexOf("RefList")===0;
     const dt=typeOf(state.cols.DueDate);if(dt!==null){state.dueTypeFromMeta=dt.indexOf("DateTime")===0;state.dueIsDateTime=state.dueTypeFromMeta;}
     const ct=typeOf(state.cols.Category);if(ct!==null){state.catMulti=isList(ct);state.catTypeKnown=true;}
-    const pt=typeOf(state.cols.Priority);if(pt!==null){state.priIsBool=pt==="Bool";state.priTypeKnown=true;}
     // pull canonical choice lists
     const sc=choicesOf(state.cols.Status);if(sc.length)state.choiceStatus=sc;
     const cc=choicesOf(state.cols.Category);if(cc.length)state.choiceCategory=cc;
@@ -286,11 +423,12 @@ function setDue(id,ts){if(state.mapped.DueDate)writeField(id,state.cols.DueDate,
 function setDescription(id,t){if(state.mapped.Description)writeField(id,state.cols.Description,(t&&t.trim()!=="")?t:null,"description");}
 function setProject(id,arr){if(state.mapped.Project)writeField(id,state.cols.Project,(arr&&arr.length)?arr[0]:null,"project");}
 function setTitle(id,v){if(state.cols.Title&&v&&v.trim())writeField(id,state.cols.Title,v.trim(),"title");}
+function setDaysToComplete(id,n){if(state.mapped.DaysToComplete)writeField(id,state.cols.DaysToComplete,(typeof n==="number"&&n>=0)?n:null,"days to complete");}
 function setRecurrence(id,n){if(state.mapped.Recurrence)writeField(id,state.cols.Recurrence,(typeof n==="number"&&n>=1)?n:null,"recurrence");}
 function setCategory(id,arr){if(state.mapped.Category)writeField(id,state.cols.Category,encodeMulti(arr,state.catMulti),"category");}
-function setPriority(id,arr){if(!state.mapped.Priority)return;let v=(arr&&arr.length)?arr[0]:null;if(v!==null&&v!==""&&!isNaN(Number(v)))v=Number(v);writeField(id,state.cols.Priority,v,"priority");}
+function setPriority(id,v){if(!state.mapped.Priority)return;writeField(id,state.cols.Priority,(v&&PRIORITIES.indexOf(v)>=0)?v:null,"priority");}
 
-function persist(){if(!state.haveGrist)return;try{grist.setOptions({projects:state.projects,timing:state.timing,sort:state.sort,count:state.count,limit:state.limit,randSeed:state.randSeed,upWindow:state.upWindow});}catch(e){}}
+function persist(){if(!state.haveGrist)return;try{grist.setOptions({projects:state.projects,categories:state.categories,timing:state.timing,sort:state.sort,count:state.count,limit:state.limit,randSeed:state.randSeed,upWindow:state.upWindow,shuffled:state.shuffled,statView:state.statView,headCollapsed:state.headCollapsed});}catch(e){}}
 
 function encodeDateObj(d){if(state.dueIsDateTime)return new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0).getTime()/1000;return Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/1000;}
 async function createTask(fields){
@@ -319,9 +457,25 @@ function processRecurrence(){
         if(state.cols.Priority&&r.priority!==null&&r.priority!==undefined)fields[state.cols.Priority]=r.priority;
         if(state.cols.Description&&r.description!==null&&r.description!==undefined)fields[state.cols.Description]=r.description;
         if(state.cols.Recurrence)fields[state.cols.Recurrence]=days;                 // carry recurrence forward
+        if(state.cols.DaysToComplete&&r.daysToComplete!==null&&r.daysToComplete!==undefined)fields[state.cols.DaysToComplete]=r.daysToComplete;
         if(state.cols.AssignedDate)fields[state.cols.AssignedDate]=encodeDateObj(today);
         // Status intentionally omitted -> the new task starts active
         Promise.resolve(createTask(fields)).catch(()=>{}).then(()=>{state.spawning.delete(r.id);});
+      }
+    });
+  }
+  // Stamp CompletedDate on any task that just transitioned open -> complete,
+  // and clear it if a task is re-opened. Independent of recurrence.
+  if(ready&&state.mapped.CompletedDate&&state.mapped.Status){
+    const today=new Date();
+    state.records.forEach(r=>{
+      const doneNow=isComplete(r);
+      const wasOpen=state.prevComplete[r.id]===false;
+      const wasDone=state.prevComplete[r.id]===true;
+      if(doneNow&&wasOpen&&!r.completedDate){
+        writeField(r.id,state.cols.CompletedDate,encodeDateObj(today),"completed date");
+      }else if(!doneNow&&wasDone&&r.completedDate){
+        writeField(r.id,state.cols.CompletedDate,null,"completed date");
       }
     });
   }
@@ -332,9 +486,24 @@ function processRecurrence(){
 
 /* ===================== Queue logic ===================== */
 function isDoneOrCancelled(r){return isComplete(r)||isCancelled(r);}
+function matchesSearch(r){
+  const q=(state.search||"").trim().toLowerCase();
+  if(!q)return true;
+  const hay=[r.title,r.description,toList(r.project).join(" "),toList(r.category).join(" ")].filter(v=>v!==null&&v!==undefined).join(" ").toLowerCase();
+  return q.split(/\s+/).every(term=>hay.indexOf(term)>=0);
+}
 function eligible(r){
-  if(isDoneOrCancelled(r))return false;
+  const view=statViewActive();
+  // Project / category / search always apply, in every view.
+  if(!matchesSearch(r))return false;
   if(state.projects.length){const p=recProj(r);if(!p.some(x=>state.projects.indexOf(x)>=0))return false;}
+  if(state.categories.length){const c=recCats(r);if(!c.some(x=>state.categories.indexOf(x)>=0))return false;}
+  if(view)return view.match(r);          // a stat view replaces the done/timing rules
+  if(isDoneOrCancelled(r))return false;
+  // A critically overdue task is never hidden by a timing filter. Pinning is absolute:
+  // it would be worse than useless to promise a task can't be missed and then let
+  // "Upcoming, due within 14 days" quietly drop a 91-day-late filing.
+  if(isPinned(r))return true;
   const t=timingOf(r);
   if(state.timing==="overdue"&&t!=="overdue")return false;
   if(state.timing==="upcoming"&&t==="overdue")return false;
@@ -343,16 +512,401 @@ function eligible(r){
 }
 function hashf(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0)/4294967296;}
 function randKey(id){return hashf(state.randSeed+":"+id);}
+
+/* ---- Overdue intensity (graduated) ----
+   tier 0 = not overdue; 1 = 1-6d; 2 = 7-29d; 3 = 30-59d (severe);
+   4 = 60d+ (critical -> PINNED, always shown, never shuffled out). */
+/* ---- Days to complete / at-risk model ----
+   A task is AT RISK when the work it needs (daysToComplete) is >= the days
+   remaining before its deadline: you cannot finish it in the time left.
+   Urgency bands, highest preference first:
+     3 = overdue (incl. critical/pinned)
+     2 = at risk  (daysToComplete >= days remaining)
+     1 = comfortable (enough runway, or no real deadline) */
+function daysToComplete(r){
+  const v=r.daysToComplete;
+  if(v===null||v===undefined||v==="")return null;
+  const n=Number(v);
+  return (isFinite(n)&&n>=0)?n:null;
+}
+function hasRealDeadline(r){return !!r.due;}          // no due date -> no runway pressure
+function daysRemaining(r){return daysDiff(r);}        // negative once overdue
+function isAtRisk(r){
+  const need=daysToComplete(r);
+  if(need===null)return false;
+  if(!hasRealDeadline(r))return false;                // undated: treat as no deadline pressure
+  const left=daysRemaining(r);
+  if(left<0)return false;                             // already overdue -> handled by band 3
+  return need>=left;                                  // cannot finish in the time left
+}
+function urgencyBand(r){
+  if(timingOf(r)==="overdue")return 3;
+  if(isAtRisk(r))return 2;
+  return 1;
+}
+/* Slack: days of runway left after the work is done. Negative = short by that many days. */
+function slackDays(r){
+  const need=daysToComplete(r);
+  if(need===null||!hasRealDeadline(r))return null;
+  return daysRemaining(r)-need;
+}
+
+const PIN_TIER=4;
+function overdueDays(r){const d=daysDiff(r);return d<0?Math.abs(d):0;}
+function overdueTier(r){
+  const d=overdueDays(r);
+  if(d<=0)return 0;
+  if(d<7)return 1;
+  if(d<30)return 2;
+  if(d<60)return 3;
+  return 4;
+}
+function isPinned(r){return overdueTier(r)>=PIN_TIER;}
+/* Selection weight: higher = likelier to surface in a shuffle.
+   Band dominates (overdue > at-risk > comfortable); overdue depth and
+   priority refine within a band. */
+function shuffleWeight(r){
+  const band=urgencyBand(r);
+  let w;
+  if(band===3){
+    w=[0,8,14,22,40][overdueTier(r)];          // overdue: escalates with depth
+  }else if(band===2){
+    const s=slackDays(r);                       // 0 or negative
+    const shortBy=(s===null)?0:Math.max(0,-s);
+    w=4+Math.min(shortBy,10)*0.4;               // 4.0 -> 8.0 as it falls further behind
+  }else{
+    w=1;
+  }
+  if(isImportant(r.priority))w*=1.6;            // High priority leans in
+  return w;
+}
+/* Weighted, seeded, without-replacement pick of n items. Pinned items always included first. */
+function weightedPick(list,n,seed){
+  const pinned=list.filter(isPinned);
+  const rest=list.filter(r=>!isPinned(r));
+  const out=pinned.slice(0,n);                 // pinned never shuffle out
+  let remaining=n-out.length;
+  if(remaining<=0)return out;
+  const pool=rest.map(r=>({r:r,w:shuffleWeight(r)}));
+  while(remaining>0&&pool.length){
+    let total=0;for(const p of pool)total+=p.w;
+    // seeded draw, varied per pick index
+    const roll=hashf(seed+":"+remaining+":"+pool.length)*total;
+    let acc=0,idx=0;
+    for(let i=0;i<pool.length;i++){acc+=pool[i].w;if(roll<=acc){idx=i;break;}idx=i;}
+    out.push(pool[idx].r);
+    pool.splice(idx,1);
+    remaining--;
+  }
+  return out;
+}
 function assignedVal(r){return (typeof r.assignedRaw==="number")?r.assignedRaw:-Infinity;}
 function sortQueue(list){
   const arr=list.slice();
   if(state.sort==="due")arr.sort((a,b)=>dueN(effectiveDue(a))-dueN(effectiveDue(b))||String(a.title).localeCompare(String(b.title)));
   else if(state.sort==="assigned-new")arr.sort((a,b)=>assignedVal(b)-assignedVal(a));
   else if(state.sort==="assigned-old")arr.sort((a,b)=>{const av=assignedVal(a),bv=assignedVal(b);return (av===-Infinity?Infinity:av)-(bv===-Infinity?Infinity:bv);});
+  else if(state.sort==="overdue")arr.sort((a,b)=>overdueTier(b)-overdueTier(a)||overdueDays(b)-overdueDays(a)||dueN(effectiveDue(a))-dueN(effectiveDue(b)));
+  else if(state.sort==="risk")arr.sort((a,b)=>urgencyBand(b)-urgencyBand(a)||shuffleWeight(b)-shuffleWeight(a)||dueN(effectiveDue(a))-dueN(effectiveDue(b)));
   else if(state.sort==="random")arr.sort((a,b)=>randKey(a.id)-randKey(b.id));
   return arr;
 }
+/* All eligible tasks, in display order. */
 function queueList(){return sortQueue(state.records.filter(eligible));}
+/* Which tasks are actually shown: when shuffled, a weighted pick (pinned always in);
+   otherwise the first N of the sorted list. Sort always governs display order. */
+function shownList(all){
+  if(statViewActive())return all;        // a stat view shows every matching task
+  if(!state.limit)return all;
+  if(state.shuffled){
+    const picked=weightedPick(all,state.count,state.randSeed);
+    const ids=new Set(picked.map(r=>r.id));
+    return all.filter(r=>ids.has(r.id));   // keep sort order
+  }
+  // not shuffled: still guarantee pinned (critically overdue) tasks are never hidden
+  const head=all.slice(0,state.count);
+  const ids=new Set(head.map(r=>r.id));
+  const missedPins=all.filter(r=>isPinned(r)&&!ids.has(r.id));
+  if(!missedPins.length)return head;
+  const merged=new Set(head.concat(missedPins).map(r=>r.id));
+  return all.filter(r=>merged.has(r.id));
+}
+
+/* ---- Stats strip (utility 6) ---- */
+/* Sticky-header shadow: only show the divider once the page is actually scrolled. */
+function attachStickyWatch(){
+  if(state._stickyWatch)return;
+  state._stickyWatch=true;
+  const onScroll=()=>{
+    const h=document.getElementById("stickyhead");
+    if(!h)return;
+    // In Grist the widget is an iframe; the scroll container may be the window,
+    // the document element, or #app. Take whichever reports movement.
+    const app=document.getElementById("app");
+    const y=Math.max(
+      window.scrollY||0,
+      document.documentElement?document.documentElement.scrollTop||0:0,
+      document.body?document.body.scrollTop||0:0,
+      app?app.scrollTop||0:0
+    );
+    h.classList.toggle("stuck",y>2);
+  };
+  window.addEventListener("scroll",onScroll,{passive:true});
+  const app=document.getElementById("app");
+  if(app)app.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+}
+/* Publish the sticky header's height so the bulk bar can pin just below it. */
+function syncHeadHeight(){
+  const h=document.getElementById("stickyhead");
+  if(!h)return;
+  const px=Math.round(h.getBoundingClientRect().height);
+  document.documentElement.style.setProperty("--headh",px+"px");
+}
+
+/* ===================== Undo ===================== */
+/* Snapshot prior values before a destructive action, then offer a timed toast.
+   Covers: delete (single + bulk), bulk complete, snooze/date changes, status changes. */
+const UNDO_MS=12000;
+function rawFieldsOf(r){
+  // reconstruct the raw column values for a record, so we can restore it verbatim
+  const f={};
+  const put=(key,val)=>{const col=state.cols[key];if(col&&val!==undefined)f[col]=val;};
+  put("Title",r.title);
+  put("DueDate",r.due?r.due.raw:null);
+  put("Project",r.project);
+  put("Category",r.category);
+  put("Priority",r.priority);
+  put("Status",r.status);
+  put("Description",r.description);
+  put("Recurrence",r.recurrence);
+  put("DaysToComplete",r.daysToComplete);
+  put("AssignedDate",r.assignedRaw);
+  return f;
+}
+function pushUndo(label,undoFn){
+  state.undo={label:label,fn:undoFn,at:Date.now()};
+  if(state.undoTimer)clearTimeout(state.undoTimer);
+  state.undoTimer=setTimeout(()=>{state.undo=null;state.undoTimer=null;render();},UNDO_MS);
+  render();
+}
+async function runUndo(){
+  const u=state.undo;
+  if(!u)return;
+  state.undo=null;
+  if(state.undoTimer){clearTimeout(state.undoTimer);state.undoTimer=null;}
+  render();
+  try{await u.fn();}catch(e){console.error("undo failed:",e);alert("Could not undo that.");}
+}
+/* Undo helpers for specific actions */
+function undoableFieldChange(ids,label){
+  // capture current values of the given rows, return a restore fn
+  const snaps=ids.map(id=>{const r=state.records.find(x=>x.id===id);return r?{id:id,fields:rawFieldsOf(r)}:null;}).filter(Boolean);
+  return ()=>Promise.all(snaps.map(s=>restoreFields(s.id,s.fields)));
+}
+async function restoreFields(rowId,fields){
+  try{await grist.selectedTable.update({id:rowId,fields:fields});}
+  catch(e){try{const tid=await grist.selectedTable.getTableId();await grist.docApi.applyUserActions([["UpdateRecord",tid,rowId,fields]]);}catch(e2){console.error(e2);}}
+}
+async function recreateRecords(snaps){
+  // snaps: [{fields}] — recreate deleted rows (new ids, same content)
+  for(const s of snaps){await createTask(s.fields);}
+}
+function undoToast(){
+  const t=el("div","toast");
+  t.appendChild(Object.assign(el("span","toast-txt"),{textContent:state.undo.label}));
+  const b=el("button","toast-undo");b.textContent="Undo";b.onclick=runUndo;
+  t.appendChild(b);
+  const x=el("button","toast-x");x.textContent="\u2715";x.title="Dismiss";
+  x.onclick=()=>{state.undo=null;if(state.undoTimer){clearTimeout(state.undoTimer);state.undoTimer=null;}render();};
+  t.appendChild(x);
+  return t;
+}
+
+/* ---- Stat views: clicking a stat filters the queue to just those tasks ----
+   These are view overrides: they replace the timing filter and show every match
+   (no Top-N cap), while still honoring project / category / search filters. */
+const STAT_VIEWS={
+  open:      {label:"open",      match:r=>!isDoneOrCancelled(r)},
+  overdue:   {label:"overdue",   match:r=>!isDoneOrCancelled(r)&&timingOf(r)==="overdue"},
+  critical:  {label:"critical",  match:r=>!isDoneOrCancelled(r)&&isPinned(r)},
+  atrisk:    {label:"at risk",   match:r=>!isDoneOrCancelled(r)&&isAtRisk(r)},
+  oldest:    {label:"oldest overdue", match:r=>{
+                if(isDoneOrCancelled(r))return false;
+                const open=state.records.filter(x=>!isDoneOrCancelled(x));
+                let mx=0;open.forEach(x=>{const d=overdueDays(x);if(d>mx)mx=d;});
+                return mx>0&&overdueDays(r)===mx;}},
+  completed: {label:"completed", match:r=>{
+                if(!isComplete(r))return false;
+                if(!state.mapped.CompletedDate)return true;
+                const cut=addCalendarDays(new Date(),-30);
+                const cutN=cut.getFullYear()*10000+cut.getMonth()*100+cut.getDate();
+                return r.completedDate&&dueN(r.completedDate)>=cutN;}},
+};
+function statViewActive(){return state.statView&&STAT_VIEWS[state.statView];}
+function setStatView(key){
+  state.statView=(state.statView===key)?null:key;
+  state.selected.clear();state.focusIdx=-1;
+  persist();render();
+}
+function statsStrip(){
+  const s=el("div","stats");
+  const open=state.records.filter(r=>!isDoneOrCancelled(r));
+  const overdue=open.filter(r=>timingOf(r)==="overdue");
+  const crit=open.filter(isPinned);
+  let oldest=0;open.forEach(r=>{const d=overdueDays(r);if(d>oldest)oldest=d;});
+  const completedAll=state.records.filter(r=>isComplete(r));
+  let doneRecent=completedAll.length, doneLabel="completed";
+  if(state.mapped.CompletedDate){
+    const cut=addCalendarDays(new Date(),-30);
+    const cutN=cut.getFullYear()*10000+cut.getMonth()*100+cut.getDate();
+    doneRecent=completedAll.filter(r=>r.completedDate&&dueN(r.completedDate)>=cutN).length;
+    doneLabel="completed (30d)";
+  }
+  const add=(key,label,val,cls)=>{
+    const active=state.statView===key;
+    const b=el("button","stat"+(cls?" "+cls:"")+(active?" on":""));
+    b.appendChild(Object.assign(el("b"),{textContent:String(val)}));
+    b.appendChild(Object.assign(el("span"),{textContent:" "+label}));
+    b.title=active?"Click to clear this view":("Show all "+label+" tasks");
+    b.setAttribute("aria-pressed",active?"true":"false");
+    b.disabled=(val===0&&key!=="open");
+    b.onclick=()=>setStatView(key);
+    s.appendChild(b);
+  };
+  add("open","open",open.length);
+  add("overdue","overdue",overdue.length,overdue.length?"stat-warn":"");
+  if(crit.length)add("critical","critical",crit.length,"stat-crit");
+  if(state.mapped.DaysToComplete){const atr=open.filter(isAtRisk);if(atr.length)add("atrisk","at risk",atr.length,"stat-warn");}
+  add("oldest",oldest===1?"day oldest overdue":"days oldest overdue",oldest,oldest>=60?"stat-crit":(oldest>=30?"stat-warn":""));
+  add("completed",doneLabel,doneRecent);
+  return s;
+}
+
+/* ---- Search (utility 4) ---- */
+function searchBox(){
+  const w=el("div","searchwrap");
+  const i=document.createElement("input");i.type="text";i.className="searchinput";i.id="qsearch";
+  i.placeholder="Search title, note, project, category\u2026  ( / )";
+  i.value=state.search;
+  i.oninput=()=>{state.search=i.value;state.selected.clear();renderKeepFocus("qsearch");};
+  w.appendChild(i);
+  if(state.search){const x=el("button","searchclear");x.textContent="\u2715";x.title="Clear search";
+    x.onclick=()=>{state.search="";render();};w.appendChild(x);}
+  return w;
+}
+/* re-render but restore focus+caret to a given input id */
+function renderKeepFocus(id){
+  const prev=document.getElementById(id);
+  const pos=prev?prev.selectionStart:null;
+  render();
+  const next=document.getElementById(id);
+  if(next){next.focus();if(pos!==null){try{next.setSelectionRange(pos,pos);}catch(e){}}}
+}
+
+/* ---- Snooze ---- */
+function snoozeTask(r,days){
+  const base=new Date();                       // snooze is relative to today, not the old due date
+  const restore=undoableFieldChange([r.id]);
+  setDue(r.id,encodeDateObj(addCalendarDays(base,days)));
+  pushUndo("Snoozed \u201c"+(r.title||"task")+"\u201d "+days+"d",restore);
+}
+function nextMondayDays(){const n=new Date();const dow=n.getDay();return ((8-dow)%7)||7;}
+
+/* ---- Bulk actions ---- */
+function bulkBar(shown){
+  const b=el("div","bulkbar");
+  const n=state.selected.size;
+  b.appendChild(Object.assign(el("span","bulk-count"),{textContent:n+" selected"}));
+  const acts=el("div","bulk-acts");
+  const mk=(label,fn,cls)=>{const x=el("button","bulkbtn"+(cls?" "+cls:""));x.textContent=label;x.onclick=fn;acts.appendChild(x);};
+  const ids=()=>Array.from(state.selected);
+  const plural=(k)=>k+" task"+(k===1?"":"s");
+  if(state.mapped.Status){
+    const completeVal=(statusOptions().find(s=>COMPLETE_WORDS.has(String(s).toLowerCase())))||"Complete";
+    mk("\u2713 Complete",()=>{const list=ids();const k=list.length;const restore=undoableFieldChange(list);
+      list.forEach(id=>setStatus(id,completeVal));state.selected.clear();
+      pushUndo("Completed "+plural(k),restore);});
+  }
+  const bulkSnooze=(label,daysFn)=>mk(label,()=>{const list=ids();const k=list.length;const restore=undoableFieldChange(list);
+    const d=daysFn();const base=new Date();
+    list.forEach(id=>{const r=state.records.find(x=>x.id===id);if(r)setDue(id,encodeDateObj(addCalendarDays(base,d)));});
+    state.selected.clear();pushUndo("Snoozed "+plural(k)+" "+d+"d",restore);});
+  bulkSnooze("+1d",()=>1);
+  bulkSnooze("+7d",()=>7);
+  bulkSnooze("Next Mon",nextMondayDays);
+  if(state.mapped.Project){
+    const psel=document.createElement("select");psel.className="bulksel";
+    psel.appendChild(opt("","Set project\u2026",true));
+    knownProjects().forEach(p=>psel.appendChild(opt(p,p,false)));
+    psel.onchange=()=>{const v=psel.value;if(!v)return;const list=ids();const k=list.length;const restore=undoableFieldChange(list);
+      list.forEach(id=>setProject(id,[v]));state.selected.clear();
+      pushUndo("Moved "+plural(k)+" to \u201c"+v+"\u201d",restore);};
+    acts.appendChild(psel);
+  }
+  mk("\u{1F5D1} Delete",async()=>{
+    const list=ids();const k=list.length;
+    if(!confirm("Delete "+plural(k)+"?"))return;
+    const snaps=list.map(id=>{const r=state.records.find(x=>x.id===id);return r?{fields:rawFieldsOf(r)}:null;}).filter(Boolean);
+    state.selected.clear();
+    for(const id of list)await bulkDelete(id);
+    pushUndo("Deleted "+plural(k),()=>recreateRecords(snaps));
+  },"bulk-danger");
+  mk("Cancel",()=>{state.selected.clear();render();},"bulk-plain");
+  b.appendChild(acts);
+  return b;
+}
+async function bulkDelete(rowId){
+  try{await grist.selectedTable.destroy(rowId);}
+  catch(e){try{const tid=await grist.selectedTable.getTableId();await grist.docApi.applyUserActions([["RemoveRecord",tid,rowId]]);}catch(e2){console.error(e2);}}
+}
+
+/* ---- Keyboard shortcuts (utility 3) ---- */
+function typingInField(e){
+  const t=e.target;if(!t)return false;
+  const tag=(t.tagName||"").toLowerCase();
+  return tag==="input"||tag==="textarea"||tag==="select"||t.isContentEditable;
+}
+document.addEventListener("keydown",(e)=>{
+  if(!state.haveGrist&&!state.demoMode)return;
+  // "/" focuses search even from anywhere except a field
+  if(e.key==="/"&&!typingInField(e)){e.preventDefault();const s=document.getElementById("qsearch");if(s)s.focus();return;}
+  if(typingInField(e)){
+    if(e.key==="Escape"){e.target.blur();clearTransient();render();}
+    return;
+  }
+  const all=queueList();const shown=shownList(all);
+  if(!shown.length&&e.key!=="n"&&e.key!=="N")return;
+  const cur=()=>shown[state.focusIdx];
+  const move=(d)=>{let i=state.focusIdx+d;if(i<0)i=0;if(i>shown.length-1)i=shown.length-1;state.focusIdx=i;render();
+    const node=document.querySelector('.row.kfocus');if(node&&node.scrollIntoView)node.scrollIntoView({block:"nearest"});};
+  switch(e.key){
+    case "j": case "ArrowDown": e.preventDefault();if(state.focusIdx<0)state.focusIdx=0;else move(1);if(state.focusIdx===0)render();break;
+    case "k": case "ArrowUp": e.preventDefault();if(state.focusIdx<0)state.focusIdx=0;move(-1);break;
+    case "c": case "C": {const r=cur();if(!r||!state.mapped.Status)break;e.preventDefault();
+      const v=(statusOptions().find(s=>COMPLETE_WORDS.has(String(s).toLowerCase())))||"Complete";
+      const restore=undoableFieldChange([r.id]);setStatus(r.id,v);
+      pushUndo("Completed \u201c"+(r.title||"task")+"\u201d",restore);break;}
+    case "e": case "E": {const r=cur();if(!r)break;e.preventDefault();state.expandedRows.add(r.id);openInlineEditor("title",r.id);break;}
+    case "s": case "S": {const r=cur();if(!r)break;e.preventDefault();snoozeTask(r,1);break;}
+    case "x": case "X": {const r=cur();if(!r)break;e.preventDefault();
+      if(state.selected.has(r.id))state.selected.delete(r.id);else state.selected.add(r.id);render();break;}
+    case "d": case "D": {const r=cur();if(!r)break;e.preventDefault();duplicateTask(r);break;}
+    case "n": case "N": e.preventDefault();state.creating=true;state.newDraft=null;render();break;
+    case "Escape": state.focusIdx=-1;state.selected.clear();clearTransient();render();break;
+    case "?": e.preventDefault();state.showHelp=!state.showHelp;render();break;
+    case "z": case "Z": if((e.metaKey||e.ctrlKey)&&state.undo){e.preventDefault();runUndo();}break;
+  }
+});
+function helpPanel(){
+  const h=el("div","helppanel");
+  h.appendChild(Object.assign(el("div","ctl-label"),{textContent:"Keyboard shortcuts"}));
+  const rows=[["J / \u2193","next task"],["K / \u2191","previous task"],["C","mark complete"],["E","edit title"],["S","snooze 1 day"],["X","select for bulk action"],["N","new task"],["/","search"],["Esc","clear focus & selection"],["\u2318/Ctrl+Z","undo last action"],["D","duplicate task"],["?","toggle this panel"]];
+  const g=el("div","helpgrid");
+  rows.forEach(([k,v])=>{g.appendChild(Object.assign(el("kbd"),{textContent:k}));g.appendChild(Object.assign(el("span"),{textContent:v}));});
+  h.appendChild(g);
+  return h;
+}
 
 /* ===================== Render ===================== */
 function render(){
@@ -362,6 +916,7 @@ function render(){
   head.appendChild(Object.assign(el("h1"),{textContent:"My Work Queue"}));
   const hright=el("div","head-right");
   if(state.demoMode){const db=el("span","demobadge");db.textContent="DEMO \u2014 fake IL/N.D.Ill. data";hright.appendChild(db);}
+  const hk=el("button","hkbtn");hk.textContent="?";hk.title="Keyboard shortcuts";hk.onclick=()=>{state.showHelp=!state.showHelp;render();};hright.appendChild(hk);
   const newBtn=el("button","newbtn");newBtn.textContent="\uFF0B New task";
   newBtn.onclick=()=>{state.creating=true;state.newDraft=null;render();};
   hright.appendChild(newBtn);head.appendChild(hright);
@@ -374,15 +929,43 @@ function render(){
     root.appendChild(c);return;
   }
   if(state.creating)root.appendChild(newTaskForm());
-  root.appendChild(controls());
+  if(state.showHelp)root.appendChild(helpPanel());
+  // Stats, search, and filters pin together as one sticky header.
+  const sticky=el("div","stickyhead"+(state.headCollapsed?" collapsed":""));
+  sticky.id="stickyhead";
+  sticky.appendChild(statsStrip());
+  sticky.appendChild(searchBox());
+  sticky.appendChild(controls());
+  const tg=el("div","headtoggle");
+  const tb=el("button");
+  tb.textContent=state.headCollapsed?"\u25BE Show filters":"\u25B4 Hide filters";
+  tb.title=state.headCollapsed?"Show search and filters":"Collapse to just the stats";
+  tb.setAttribute("aria-expanded",state.headCollapsed?"false":"true");
+  tb.onclick=()=>{state.headCollapsed=!state.headCollapsed;persist();render();};
+  tg.appendChild(tb);sticky.appendChild(tg);
+  root.appendChild(sticky);
 
   const all=queueList();
-  const shown=state.limit?all.slice(0,state.count):all;
+  const shown=shownList(all);
+  // prune stale selections
+  const shownIds=new Set(shown.map(r=>r.id));
+  Array.from(state.selected).forEach(id=>{if(!shownIds.has(id))state.selected.delete(id);});
+  if(state.selected.size)root.appendChild(bulkBar(shown));
+
   const meta=el("div","meta");
   const who=state.projects.length?state.projects.join(", "):"all projects";
-  const timingLabel=state.timing==="upcoming"&&state.upWindow>0?("upcoming \u00b7 next "+state.upWindow+"d"):state.timing;
-  const tail=" open task"+(all.length===1?"":"s")+" \u00b7 "+who+(state.timing!=="all"?" \u00b7 "+timingLabel:"");
-  meta.textContent=(state.limit?("Showing "+shown.length+" of "+all.length):("Showing all "+all.length))+tail;
+  const cats=state.categories.length?(" \u00b7 "+state.categories.join(", ")):"";
+  const view=statViewActive();
+  if(view){
+    meta.textContent="Showing all "+all.length+" \u201c"+view.label+"\u201d task"+(all.length===1?"":"s")+" \u00b7 "+who+cats;
+  }else{
+    const timingLabel=state.timing==="upcoming"&&state.upWindow>0?("upcoming \u00b7 next "+state.upWindow+"d"):state.timing;
+    const tail=" open task"+(all.length===1?"":"s")+" \u00b7 "+who+cats+(state.timing!=="all"?" \u00b7 "+timingLabel:"");
+    const pinCount=shown.filter(isPinned).length;
+    const overriding=pinCount&&state.timing==="upcoming";
+    const pinNote=pinCount?(" \u00b7 "+pinCount+" pinned"+(overriding?" (shown despite filter)":"")):"";
+    meta.textContent=(state.limit?("Showing "+shown.length+" of "+all.length):("Showing all "+all.length))+tail+pinNote;
+  }
   root.appendChild(meta);
 
   const q=el("div","queue");
@@ -392,28 +975,62 @@ function render(){
     let msg;
     if(total===0) msg="No rows are reaching this widget. Check that it's added on the table that actually holds your tasks, and that this widget's access is set to \u201cFull\u201d in the creator panel (the gear \u2192 Access).";
     else if(open===0) msg="All "+total+" task"+(total===1?"":"s")+" here are marked complete or cancelled.";
-    else msg="No tasks match the current project/timing filters \u2014 clear the project chips or set timing to \u201cAll.\u201d";
-    q.appendChild(Object.assign(el("div","empty"),{textContent:msg}));
+    else if(statViewActive())msg="No tasks in the \u201c"+statViewActive().label+"\u201d view match your project/category/search filters.";
+    else msg="No tasks match the current project/category/timing filters.";
+    const emptyEl=Object.assign(el("div","empty"),{textContent:msg});
+    q.appendChild(emptyEl);
+    if(total>0&&open>0&&filtersActive()){
+      const acts=el("div","empty-acts");
+      const addAct=(label,fn)=>{const b=el("button","clearlink");b.textContent=label;b.onclick=fn;acts.appendChild(b);};
+      // offer to drop the narrowest filter first, then the blunt reset
+      if(statViewActive())addAct("Clear the \u201c"+statViewActive().label+"\u201d view",()=>{state.statView=null;persist();render();});
+      if(state.search)addAct("Clear search \u201c"+state.search+"\u201d",()=>{state.search="";render();});
+      if(state.projects.length)addAct("Clear project filter",()=>{state.projects=[];persist();render();});
+      if(state.categories.length)addAct("Clear category filter",()=>{state.categories=[];persist();render();});
+      if(state.timing!=="all"&&!statViewActive())addAct("Show all timings",()=>{state.timing="all";state.upWindow=0;persist();render();});
+      addAct("Clear everything",clearFilters);
+      q.appendChild(acts);
+    }
   }
-  else shown.forEach(r=>q.appendChild(taskCard(r)));
+  else shown.forEach((r,i)=>q.appendChild(taskCard(r,i)));
   root.appendChild(q);
+  if(state.undo)root.appendChild(undoToast());
+  attachStickyWatch();
+  syncHeadHeight();
 }
 
+function chipFilter(container,labelText,options,selected){
+  container.appendChild(Object.assign(el("div","ctl-label"),{textContent:labelText}));
+  const pp=el("div","people");
+  if(!options.length)pp.appendChild(Object.assign(el("span","sub"),{textContent:"None defined yet."}));
+  options.forEach(n=>{
+    const chip=el("span","person"+(selected.indexOf(n)>=0?" sel":""));chip.textContent=n;
+    chip.setAttribute("role","button");chip.setAttribute("tabindex","0");chip.setAttribute("aria-pressed",selected.indexOf(n)>=0?"true":"false");
+    chip.onclick=()=>{const i=selected.indexOf(n);if(i>=0)selected.splice(i,1);else selected.push(n);persist();render();};
+    pp.appendChild(chip);
+  });
+  container.appendChild(pp);
+}
+function filtersActive(){return state.projects.length>0||state.categories.length>0||state.timing!=="all"||!!state.statView||(state.timing==="upcoming"&&state.upWindow>0);}
+function clearFilters(){state.projects=[];state.categories=[];state.timing="all";state.upWindow=0;state.statView=null;persist();render();}
 function controls(){
   const c=el("div","controls");
-  // Project filter
-  if(state.mapped.Project){
-    c.appendChild(Object.assign(el("div","ctl-label"),{textContent:"Project (none = all)"}));
-    const pp=el("div","people");
-    const projs=uniqSorted([].concat.apply([],state.records.map(recProj))).filter(n=>n!==NO_PROJECT);
-    if(!projs.length)pp.appendChild(Object.assign(el("span","sub"),{textContent:"No projects yet \u2014 add one to a task below."}));
-    projs.forEach(n=>{
-      const chip=el("span","person"+(state.projects.indexOf(n)>=0?" sel":""));chip.textContent=n;
-      chip.onclick=()=>{const i=state.projects.indexOf(n);if(i>=0)state.projects.splice(i,1);else state.projects.push(n);persist();render();};
-      pp.appendChild(chip);
-    });
-    c.appendChild(pp);
+  if(filtersActive()){
+    const bar=el("div","clearbar");
+    const n=[];
+    if(state.projects.length)n.push(state.projects.length+" project"+(state.projects.length===1?"":"s"));
+    if(state.categories.length)n.push(state.categories.length+" categor"+(state.categories.length===1?"y":"ies"));
+    if(statViewActive())n.push("\u201c"+statViewActive().label+"\u201d view");
+    if(!statViewActive()&&state.timing!=="all")n.push(state.timing==="upcoming"&&state.upWindow>0?("upcoming \u2264"+state.upWindow+"d"):state.timing);
+    bar.appendChild(Object.assign(el("span","clearbar-txt"),{textContent:"Filtered by "+n.join(" \u00b7 ")}));
+    const link=el("button","clearlink");link.textContent="Clear filters";link.onclick=clearFilters;
+    bar.appendChild(link);
+    c.appendChild(bar);
   }
+  // Project filter (canonical list, independent of assignment counts)
+  if(state.mapped.Project)chipFilter(c,"Project (none = all)",knownProjects(),state.projects);
+  // Category filter (canonical list)
+  if(state.mapped.Category)chipFilter(c,"Category (none = all)",knownCategories(),state.categories);
 
   const row=el("div","ctl-row");
   // Timing
@@ -437,17 +1054,28 @@ function controls(){
   const sf=el("div","field");sf.appendChild(Object.assign(el("div","ctl-label"),{textContent:"Order"}));
   const sel=document.createElement("select");sel.className="sortsel";
   sel.appendChild(opt("due","Due date (soonest)",state.sort==="due"));
+  sel.appendChild(opt("overdue","Most overdue first",state.sort==="overdue"));
+  if(state.mapped.DaysToComplete)sel.appendChild(opt("risk","Urgency (overdue \u203a at risk)",state.sort==="risk"));
   if(state.mapped.AssignedDate){sel.appendChild(opt("assigned-new","Assigned (newest first)",state.sort==="assigned-new"));sel.appendChild(opt("assigned-old","Assigned (oldest first)",state.sort==="assigned-old"));}
   sel.appendChild(opt("random","Random",state.sort==="random"));
   sel.onchange=()=>{state.sort=sel.value;persist();render();};
   sf.appendChild(sel);row.appendChild(sf);
 
-  if(state.sort==="random"){
-    const xf=el("div","field");xf.appendChild(Object.assign(el("div","ctl-label"),{textContent:"\u00a0"}));
-    const sh=el("button","shuffle");sh.textContent="\u21BB Shuffle";
-    sh.onclick=()=>{state.randSeed="s"+Date.now()+"-"+Math.floor(Math.random()*1e6);persist();render();};
-    xf.appendChild(sh);row.appendChild(xf);
+  // Shuffle (works with any sort; only meaningful when limiting to Top N)
+  const xf=el("div","field");xf.appendChild(Object.assign(el("div","ctl-label"),{textContent:"\u00a0"}));
+  const shrow=el("div","countrow");
+  const sh=el("button","shuffle"+(state.shuffled?" on":""));
+  sh.textContent="\u21BB Shuffle";
+  sh.title=state.limit?"Draw a different set of tasks. Critically overdue tasks stay pinned.":"Shuffle applies when limiting to Top N.";
+  sh.disabled=!state.limit;
+  sh.onclick=()=>{state.shuffled=true;state.randSeed="s"+Date.now()+"-"+Math.floor(Math.random()*1e6);state.selected.clear();persist();render();};
+  shrow.appendChild(sh);
+  if(state.shuffled){
+    const off=el("button","shuffle-off");off.textContent="\u2715";off.title="Stop shuffling \u2014 back to the top of the list";
+    off.onclick=()=>{state.shuffled=false;state.selected.clear();persist();render();};
+    shrow.appendChild(off);
   }
+  xf.appendChild(shrow);row.appendChild(xf);
 
   // Limit toggle + count stepper
   const cf=el("div","field");cf.appendChild(Object.assign(el("div","ctl-label"),{textContent:"How many"}));
@@ -469,7 +1097,7 @@ function controls(){
 /* ----- create a new task directly from the widget ----- */
 function nfLine(labelText){const r=el("div","nrow");r.appendChild(Object.assign(el("label"),{textContent:labelText}));return r;}
 function newTaskForm(){
-  const d=state.newDraft||(state.newDraft={date:iso(new Date()),time:"09:00",title:"",project:"",status:"",category:"",priority:"",priBool:false,recur:"",description:""});
+  const d=state.newDraft||(state.newDraft={date:iso(new Date()),time:"09:00",title:"",project:"",status:"",category:"",priority:"",priBool:false,recur:"",dtc:"",description:""});
   const box=el("div","controls newform");
   box.appendChild(Object.assign(el("div","ctl-label"),{textContent:"New task"}));
   // Title
@@ -511,12 +1139,18 @@ function newTaskForm(){
     box.appendChild(r);
   }
   // Priority
-  if(state.mapped.Priority){const r=nfLine("Priority");
-   if(state.priIsBool){const lab=document.createElement("label");lab.style.cssText="text-transform:none;letter-spacing:0;min-width:0;display:flex;gap:6px;align-items:center;";const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!d.priBool;cb.onchange=()=>d.priBool=cb.checked;lab.append(cb,document.createTextNode("Important"));r.appendChild(lab);}
-   else{const i=document.createElement("input");i.type="text";i.className="ntf small";i.placeholder="e.g. High";i.value=d.priority;i.oninput=()=>d.priority=i.value;r.appendChild(i);}box.appendChild(r);}
+  if(state.mapped.Priority){
+    const r=nfLine("Priority");
+    const s=document.createElement("select");s.className="ntf small";
+    s.appendChild(opt("","\u2014 none \u2014",!d.priority));
+    PRIORITIES.forEach(p=>s.appendChild(opt(p,p,d.priority===p)));
+    s.onchange=()=>d.priority=s.value;
+    r.appendChild(s);box.appendChild(r);
+  }
   // Recurrence
   if(state.mapped.Recurrence){const r=nfLine("Repeat");const i=document.createElement("input");i.type="number";i.min="1";i.className="ntf small";i.placeholder="days";i.value=d.recur;i.oninput=()=>d.recur=i.value;r.appendChild(i);r.appendChild(Object.assign(el("span"),{textContent:"days (blank = no repeat)"}));box.appendChild(r);}
   // Description
+  if(state.mapped.DaysToComplete){const r=nfLine("Est. work");const i=document.createElement("input");i.type="number";i.min="0";i.step="0.5";i.className="ntf small";i.placeholder="days";i.value=d.dtc||"";i.oninput=()=>d.dtc=i.value;r.appendChild(i);r.appendChild(Object.assign(el("span"),{textContent:"days of work (optional)"}));box.appendChild(r);}
   if(state.mapped.Description){const r=nfLine("Note");const t=document.createElement("textarea");t.className="ntf";t.style.minHeight="52px";t.value=d.description;t.oninput=()=>d.description=t.value;r.appendChild(t);box.appendChild(r);}
   // Actions
   const acts=el("div","nform-actions");
@@ -535,7 +1169,8 @@ function submitNewTask(){
   if(state.mapped.Project&&d.project&&d.project.trim())fields[state.cols.Project]=d.project.trim();
   if(state.mapped.Status&&d.status)fields[state.cols.Status]=d.status;
   if(state.mapped.Category&&d.category&&d.category.trim())fields[state.cols.Category]=encodeMulti([d.category.trim()],state.catMulti);
-  if(state.mapped.Priority){if(state.priIsBool){if(d.priBool)fields[state.cols.Priority]=true;}else if(d.priority&&d.priority.trim()){let v=d.priority.trim();if(!isNaN(Number(v)))v=Number(v);fields[state.cols.Priority]=v;}}
+  if(state.mapped.Priority&&d.priority&&PRIORITIES.indexOf(d.priority)>=0)fields[state.cols.Priority]=d.priority;
+  if(state.mapped.DaysToComplete&&d.dtc!==""&&d.dtc!==undefined&&d.dtc!==null){const n=Number(d.dtc);if(isFinite(n)&&n>=0)fields[state.cols.DaysToComplete]=n;}
   if(state.mapped.Recurrence){const n=parseInt(d.recur,10);if(n>=1)fields[state.cols.Recurrence]=n;}
   if(state.mapped.Description&&d.description&&d.description.trim())fields[state.cols.Description]=d.description.trim();
   if(state.mapped.AssignedDate)fields[state.cols.AssignedDate]=encodeDateObj(new Date());
@@ -545,20 +1180,39 @@ function submitNewTask(){
 }
 
 /* ----- task card (editable, like the calendar's line items) ----- */
-function taskCard(r){
+function taskCard(r,idx){
   const kind=classify(r);
   const expanded=state.expandedRows.has(r.id);
+  const tier=overdueTier(r);
+  const pinned=isPinned(r);
   const editingDesc=state.editingDescRow===r.id,editingCat=state.editingCatRow===r.id,editingPri=state.editingPriRow===r.id,editingProj=state.editingProjRow===r.id,editingRec=state.editingRecRow===r.id,editingTitle=state.editingTitleRow===r.id;
-  const row=el("div","row "+kind+(expanded?" expanded":""));
-  row.style.borderLeftColor=stripeColor(r,kind);
+  const row=el("div","row "+kind+(expanded?" expanded":"")+(tier?" od"+tier:"")+(pinned?" pinned":"")+(state.focusIdx===idx?" kfocus":""));
+  row.dataset.idx=idx;
+  if(!tier)row.style.borderLeftColor=stripeColor(r,kind);
+
+  // bulk-select checkbox
+  const cbw=el("div","cbwrap");
+  const cb=document.createElement("input");cb.type="checkbox";cb.className="rowcb";
+  cb.checked=state.selected.has(r.id);
+  cb.onclick=(e)=>{e.stopPropagation();if(cb.checked)state.selected.add(r.id);else state.selected.delete(r.id);render();};
+  cbw.appendChild(cb);row.appendChild(cbw);
+
   row.appendChild(dueCell(r));
 
   const main=el("div","main");
   const top=el("div","topline");
   const t=timingOf(r);const dd=daysDiff(r);
-  if(t==="overdue")top.appendChild(Object.assign(el("span","badge over"),{textContent:"Overdue \u00b7 "+Math.abs(dd)+"d ago"}));
+  if(t==="overdue"){
+    const od=overdueDays(r);
+    const lbl=["","Overdue","Overdue","Badly overdue","CRITICALLY OVERDUE"][tier];
+    top.appendChild(Object.assign(el("span","badge over od"+tier),{textContent:lbl+" \u00b7 "+od+"d"}));
+    if(pinned){const pb=Object.assign(el("span","badge pin"),{textContent:"\u{1F4CC} pinned"});
+      pb.title="Critically overdue \u2014 always shown, regardless of filters or shuffle.";top.appendChild(pb);}
+  }
   else if(t==="today")top.appendChild(Object.assign(el("span","badge today"),{textContent:"Due today"}));
   else top.appendChild(Object.assign(el("span","badge up"),{textContent:"In "+dd+" day"+(dd===1?"":"s")}));
+  if(isAtRisk(r)){const sl=slackDays(r);
+    top.appendChild(Object.assign(el("span","badge risk"),{textContent:"\u26A0 At risk"+(sl<0?(" \u00b7 "+Math.abs(sl)+"d short"):"")}));}
   if(!editingTitle){
     top.appendChild(Object.assign(el("span","title"+(kind==="complete"?" done":"")),{textContent:(kind==="complete"?"\u2713 ":"")+(r.title||"(untitled)")}));
   }
@@ -577,11 +1231,9 @@ function taskCard(r){
     tags.appendChild(makeEditChip(recCats(r)[0]!==NO_CAT,"\uFF0B category","Edit category",()=>openInlineEditor("cat",r.id)));
   }
   if(state.mapped.Priority&&!editingPri){
-    const important=isImportant(r.priority);
-    const hasPri=r.priority!==null&&r.priority!==undefined&&r.priority!==""&&r.priority!==false;
-    if(state.priIsBool){if(important)tags.appendChild(Object.assign(el("span","tag pri imp"),{textContent:"Important!"}));}
-    else if(hasPri)tags.appendChild(Object.assign(el("span","tag pri"+(important?" imp":"")),{textContent:"\u25B2 "+r.priority}));
-    tags.appendChild(makeEditChip(state.priIsBool?important:hasPri,"\uFF0B priority","Edit priority",()=>openInlineEditor("pri",r.id)));
+    const p=normPriority(r.priority);
+    if(p)tags.appendChild(Object.assign(el("span","tag pri pri-"+p.toLowerCase()),{textContent:"\u25B2 "+p}));
+    tags.appendChild(makeEditChip(!!p,"\uFF0B priority","Set priority",()=>openInlineEditor("pri",r.id)));
   }
   if(state.mapped.Recurrence&&!editingRec){
     const days=parseRecurDays(r.recurrence);
@@ -609,6 +1261,8 @@ function taskCard(r){
   }
   row.appendChild(main);
   if(state.mapped.Status)row.appendChild(statusControl(r,kind));
+  row.appendChild(dupBtn(r));
+  row.appendChild(snoozeControl(r));
   row.appendChild(deleteBtn(r));
 
   row.onclick=()=>{if(!editingDesc&&!editingTitle){if(expanded)state.expandedRows.delete(r.id);else state.expandedRows.add(r.id);render();}selectInGrist(r.id);};
@@ -616,19 +1270,73 @@ function taskCard(r){
 }
 
 /* ----- editors (ported from the calendar) ----- */
-function clearTransient(){state.openDateRow=null;state.openStatusRow=null;state.editingDescRow=null;state.editingCatRow=null;state.editingPriRow=null;state.editingProjRow=null;state.editingRecRow=null;state.editingTitleRow=null;}
+function clearTransient(){state.openDateRow=null;state.openStatusRow=null;state.openSnoozeRow=null;state.openDtcRow=null;state.editingDescRow=null;state.editingCatRow=null;state.editingPriRow=null;state.editingProjRow=null;state.editingRecRow=null;state.editingTitleRow=null;}
 function openInlineEditor(which,id){clearTransient();if(which==="desc")state.editingDescRow=id;else if(which==="cat")state.editingCatRow=id;else if(which==="pri")state.editingPriRow=id;else if(which==="proj")state.editingProjRow=id;else if(which==="rec")state.editingRecRow=id;else if(which==="title")state.editingTitleRow=id;render();}
 function makeEditChip(has,empty,tip,fn){const c=el("span","tag editchip");c.textContent=has?"\u270E":empty;c.title=tip;c.onclick=(e)=>{e.stopPropagation();fn();};return c;}
 
 async function deleteTask(rowId,title){
   const label=title&&String(title).trim()?"\u201c"+String(title).trim()+"\u201d":"this task";
-  if(!confirm("Permanently delete "+label+"?\n\nThis cannot be undone."))return;
+  if(!confirm("Delete "+label+"?"))return;
+  const r=state.records.find(x=>x.id===rowId);
+  const snap=r?[{fields:rawFieldsOf(r)}]:[];
   try{await grist.selectedTable.destroy(rowId);}
   catch(e){try{const tid=await grist.selectedTable.getTableId();await grist.docApi.applyUserActions([["RemoveRecord",tid,rowId]]);}
-  catch(e2){console.error(e2);alert("Could not delete the task. The widget needs full (read & write) access.");}}
+  catch(e2){console.error(e2);alert("Could not delete the task. The widget needs full (read & write) access.");return;}}
+  pushUndo("Deleted "+label,()=>recreateRecords(snap));
+}
+function snoozeControl(r){
+  const w=el("div","snoozewrap");
+  const b=el("button","snoozebtn");b.textContent="\u23F1";b.title="Snooze \u2014 push this out without touching the real deadline";
+  b.setAttribute("aria-label","Snooze task: "+(r.title||"untitled"));
+  b.onclick=(e)=>{e.stopPropagation();const was=state.openSnoozeRow===r.id;clearTransient();state.openSnoozeRow=was?null:r.id;render();};
+  w.appendChild(b);
+  if(state.openSnoozeRow===r.id){
+    const m=el("div","snoozemenu");m.onclick=e=>e.stopPropagation();
+    const add=(label,days)=>{const it=el("button","statusitem");it.textContent=label;
+      it.onclick=()=>{state.openSnoozeRow=null;snoozeTask(r,days);render();};m.appendChild(it);};
+    add("Tomorrow",1);
+    add("In 3 days",3);
+    add("Next week",7);
+    add("Next Monday",nextMondayDays());
+    add("In 2 weeks",14);
+    w.appendChild(m);
+  }
+  return w;
+}
+function dtcEditor(r){
+  const ed=el("div","dateeditor");["click","mousedown"].forEach(ev=>ed.addEventListener(ev,e=>e.stopPropagation()));
+  ed.appendChild(Object.assign(el("div","dtc-hd"),{textContent:"Days of work needed"}));
+  const inp=document.createElement("input");inp.type="number";inp.min="0";inp.max="365";inp.step="0.5";
+  const cur=daysToComplete(r);inp.value=(cur===null)?"":cur;
+  ed.appendChild(inp);
+  const qs=el("div","de-shortcuts");
+  [0.5,1,2,3,5,10].forEach(n=>{const b=el("button");b.textContent=n+"d";b.onclick=()=>{inp.value=n;};qs.appendChild(b);});
+  ed.appendChild(qs);
+  const acts=el("div","de-actions");
+  const save=el("button","de-save");save.textContent="Save";
+  save.onclick=()=>{state.openDtcRow=null;const v=inp.value===""?null:Number(inp.value);setDaysToComplete(r.id,(v!==null&&isFinite(v)&&v>=0)?v:null);render();};
+  const clr=el("button","de-cancel");clr.textContent="Clear";clr.onclick=()=>{state.openDtcRow=null;setDaysToComplete(r.id,null);render();};
+  const cancel=el("button","de-cancel");cancel.textContent="Cancel";cancel.onclick=()=>{state.openDtcRow=null;render();};
+  acts.append(save,clr,cancel);ed.appendChild(acts);
+  return ed;
+}
+function duplicateTask(r){
+  const f=rawFieldsOf(r);
+  if(state.cols.Title)f[state.cols.Title]=(r.title||"Untitled")+" (copy)";
+  if(state.cols.Status)delete f[state.cols.Status];              // new copy starts open
+  if(state.cols.CompletedDate)delete f[state.cols.CompletedDate];
+  if(state.cols.AssignedDate)f[state.cols.AssignedDate]=encodeDateObj(new Date());
+  Promise.resolve(createTask(f)).catch(()=>{});
+}
+function dupBtn(r){
+  const b=el("button","dupbtn");b.title="Duplicate this task";b.textContent="\u29C9";
+  b.setAttribute("aria-label","Duplicate task: "+(r.title||"untitled"));
+  b.onclick=(e)=>{e.stopPropagation();duplicateTask(r);};
+  return b;
 }
 function deleteBtn(r){
   const b=el("button","delbtn");b.title="Delete this task";b.textContent="\u{1F5D1}";
+  b.setAttribute("aria-label","Delete task: "+(r.title||"untitled"));
   b.onclick=(e)=>{e.stopPropagation();deleteTask(r.id,r.title);};
   return b;
 }
@@ -641,6 +1349,29 @@ function dueCell(r){
   btn.innerHTML=esc(label)+' <span class="pen">\u270E</span>';
   btn.onclick=(e)=>{e.stopPropagation();const was=state.openDateRow===r.id;clearTransient();state.openDateRow=was?null:r.id;render();};
   wrap.appendChild(btn);
+
+  // --- days to complete (editable) + runway readout ---
+  if(state.mapped.DaysToComplete){
+    const need=daysToComplete(r);
+    const risk=isAtRisk(r);
+    const dtc=el("button","dtc"+(risk?" atrisk":"")+(need===null?" unset":""));
+    dtc.title="Estimated days of work needed \u2014 click to change";
+    dtc.textContent=(need===null)?"\uFF0B est." : ("\u{1F6E0} "+need+"d work");
+    dtc.onclick=(e)=>{e.stopPropagation();const was=state.openDtcRow===r.id;clearTransient();state.openDtcRow=was?null:r.id;render();};
+    wrap.appendChild(dtc);
+
+    if(need!==null&&hasRealDeadline(r)){
+      const s=slackDays(r);
+      const line=el("div","runway");
+      if(timingOf(r)==="overdue"){line.className="runway over";line.textContent="overdue";}
+      else if(s<0){line.className="runway short";line.textContent=Math.abs(s)+"d short";}
+      else if(s===0){line.className="runway tight";line.textContent="no slack";}
+      else{line.className="runway ok";line.textContent=s+"d slack";}
+      wrap.appendChild(line);
+    }
+    if(state.openDtcRow===r.id)wrap.appendChild(dtcEditor(r));
+  }
+
   if(state.openDateRow===r.id)wrap.appendChild(dateEditor(r));
   return wrap;
 }
@@ -675,7 +1406,9 @@ function statusControl(r,kind){
     const menu=el("div","statusmenu");menu.onclick=e=>e.stopPropagation();
     const opts=statusOptions();
     if(!opts.length)menu.appendChild(Object.assign(el("div","empty"),{textContent:"No status values yet."}));
-    opts.forEach(s=>{const it=el("button","statusitem"+(String(r.status)===s?" current":""));it.textContent=s;it.onclick=()=>{state.openStatusRow=null;setStatus(r.id,s);render();};menu.appendChild(it);});
+    opts.forEach(s=>{const it=el("button","statusitem"+(String(r.status)===s?" current":""));it.textContent=s;
+      it.onclick=()=>{state.openStatusRow=null;const restore=undoableFieldChange([r.id]);setStatus(r.id,s);
+        pushUndo("Set \u201c"+(r.title||"task")+"\u201d to "+s,restore);};menu.appendChild(it);});
     if(has){const clr=el("button","statusitem clear");clr.textContent="Clear status";clr.onclick=()=>{state.openStatusRow=null;setStatus(r.id,null);render();};menu.appendChild(clr);}
     wrap.appendChild(menu);
   }
@@ -748,14 +1481,20 @@ function recEditor(r){
 function catEditor(r){const ed=fieldEditShell();const p=buildTagPicker(recCats(r).filter(c=>c!==NO_CAT),state.catMulti,knownCategories(),"category");ed.appendChild(p.element);ed.appendChild(feActions(()=>{state.editingCatRow=null;setCategory(r.id,p.get());render();},()=>{state.editingCatRow=null;render();}));return ed;}
 function priEditor(r){
   const ed=fieldEditShell();
-  if(state.priIsBool){
-    let on=isImportant(r.priority);const picker=el("div","picker");const chip=el("div","pchip"+(on?" sel":""));chip.textContent="Important!";chip.onclick=(e)=>{e.stopPropagation();on=!on;chip.classList.toggle("sel",on);};picker.appendChild(chip);ed.appendChild(picker);
-    ed.appendChild(feActions(()=>{state.editingPriRow=null;writeField(r.id,state.cols.Priority,on,"priority");render();},()=>{state.editingPriRow=null;render();}));return ed;
-  }
-  const has=r.priority!==null&&r.priority!==undefined&&r.priority!=="";
-  const known=uniqSorted([].concat.apply([],state.records.map(rr=>{const v=rr.priority;return (v===null||v===undefined||v==="")?[]:[String(v)];})));
-  const p=buildTagPicker(has?[String(r.priority)]:[],false,known,"priority");ed.appendChild(p.element);
-  ed.appendChild(feActions(()=>{state.editingPriRow=null;setPriority(r.id,p.get());render();},()=>{state.editingPriRow=null;render();}));return ed;
+  let cur=normPriority(r.priority);
+  const picker=el("div","picker");
+  const chips={};
+  PRIORITIES.forEach(p=>{
+    const c=el("div","pchip pri-"+p.toLowerCase()+(cur===p?" sel":""));c.textContent=p;
+    c.onclick=(e)=>{e.stopPropagation();cur=(cur===p)?null:p;   // click again to clear
+      PRIORITIES.forEach(q=>chips[q].classList.toggle("sel",cur===q));};
+    chips[p]=c;picker.appendChild(c);
+  });
+  ed.appendChild(picker);
+  ed.appendChild(feActions(
+    ()=>{state.editingPriRow=null;setPriority(r.id,cur);render();},
+    ()=>{state.editingPriRow=null;render();}));
+  return ed;
 }
 function titleEditor(r){
   const ed=fieldEditShell();
@@ -790,20 +1529,26 @@ if(state.haveGrist){
     {name:"Title",title:"Title",type:"Any"},
     {name:"Project",title:"Project",type:"Choice,Text",optional:true,description:"The project each task belongs to \u2014 used for the project filter and editable per task."},
     {name:"Recurrence",title:"Recurrence",type:"Int,Numeric,Text,Any",optional:true,description:"Number of days. When a task with a recurrence is completed, a new identical task is created that many days out. Requires Status (to detect completion)."},
+    {name:"CompletedDate",title:"Completed Date",type:"Date,DateTime",optional:true,description:"Stamped automatically when a task is marked complete. Enables real throughput stats (\u201ccompleted in last 30 days\u201d)."},
+    {name:"DaysToComplete",title:"Days to Complete",type:"Int,Numeric,Any",optional:true,description:"Roughly how many days of work this task needs. If it is >= the days left before the deadline, the task is flagged AT RISK and weighted up."},
     {name:"AssignedDate",title:"Assigned Date",type:"Date,DateTime",optional:true,description:"When the task was assigned \u2014 enables the 'sort by assigned date' option."},
     {name:"Status",title:"Status",type:"Choice,Text",optional:true,description:"Complete/cancelled tasks drop out of the queue; needed to trigger recurring tasks."},
     {name:"Category",title:"Category",type:"Choice,ChoiceList,Text",optional:true},
-    {name:"Priority",title:"Priority",type:"Any",optional:true},
+    {name:"Priority",title:"Priority",type:"Choice,Text",optional:true,description:"Three values only: High, Medium, Low."},
     {name:"Description",title:"Description",type:"Text,Any",optional:true},
   ]});
   grist.onOptions((o)=>{o=o||{};
     if(Array.isArray(o.projects))state.projects=o.projects;
+    if(Array.isArray(o.categories))state.categories=o.categories;
     if(o.timing)state.timing=o.timing;
     if(o.sort)state.sort=o.sort;
     if(typeof o.count==="number")state.count=Math.max(1,Math.min(10,o.count));
     if(typeof o.limit==="boolean")state.limit=o.limit;
     if(o.randSeed)state.randSeed=o.randSeed;
     if(typeof o.upWindow==="number")state.upWindow=o.upWindow;
+    if(typeof o.shuffled==="boolean")state.shuffled=o.shuffled;
+    if(typeof o.statView==="string"||o.statView===null)state.statView=o.statView||null;
+    if(typeof o.headCollapsed==="boolean")state.headCollapsed=o.headCollapsed;
     render();
   });
   grist.onRecords((records,mappings)=>{ingest(records,mappings);try{processRecurrence();}catch(e){console.error("recurrence check skipped:",e);}render();if(!state.typesChecked&&state.cols.DueDate){state.typesChecked=true;detectColumnTypes();}});
@@ -814,33 +1559,37 @@ if(state.haveGrist){
   const today=new Date();
   function daysOut(n){const d=new Date(today);d.setDate(d.getDate()+n);return Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/1000;}
   const demoData=[
-    {id:1, DueDate:daysOut(-8), Title:"File appearance — Reyes v. North Shore Logistics",                   Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Federal Court",  Priority:"High",   Recurrence:null, Description:"N.D. Ill. case no. 24-cv-4471. File attorney appearance with CM/ECF before local rule deadline expires."},
-    {id:2, DueDate:daysOut(-3), Title:"Respond to written discovery — Kowalski v. City of Cicero",          Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"State Court",    Priority:"High",   Recurrence:null, Description:"Interrogatories and RFPs served 10/14. 28-day deadline under Ill. Sup. Ct. R. 213/214. Responses due, verify exact date against proof of service."},
-    {id:3, DueDate:daysOut(-1), Title:"Send HIPAA-compliant med records subpoena — Mbeki v. Elmhurst Hosp.",Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Medical",        Priority:"High",   Recurrence:null, Description:"Subpoena Elmhurst Hospital records. Confirm HIPAA auth form signed. Follow up with records dept in 10 days if no response."},
-    {id:4, DueDate:daysOut(0),  Title:"File MIDP initial disclosures — Reyes v. North Shore Logistics",     Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Federal Court",  Priority:"High",   Recurrence:null, Description:"N.D. Ill. Mandatory Initial Discovery Pilot (MIDP). Disclosures due today per Standing Order. See Judge Kendall's requirements."},
-    {id:5, DueDate:daysOut(2),  Title:"Draft demand letter — Okonkwo v. Guaranteed Rate",                  Project:"Okonkwo v. Guaranteed Rate",       Status:"Incomplete",  Category:"Pre-Suit",       Priority:"Medium", Recurrence:null, Description:"PI demand. Summarize treatment, lost wages ($34k documented), pain and suffering. Include 2-yr SOL warning (735 ILCS 5/13-202). Send via certified mail."},
-    {id:6, DueDate:daysOut(5),  Title:"Expert disclosure deadline — Mbeki v. Elmhurst Hosp.",              Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Medical",        Priority:"High",   Recurrence:null, Description:"FRCP 26(a)(2) disclosure. Retain and disclose Dr. Patel (orthopedic) as liability expert. Written report required 90 days before trial."},
-    {id:7, DueDate:daysOut(7),  Title:"File motion to extend discovery — Kowalski v. City of Cicero",      Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"State Court",    Priority:"Medium", Recurrence:null, Description:"Defense stonewalling on document production. Draft 735 ILCS 5/2-1009 motion for 60-day extension. Need judge's standing order re: briefing schedule."},
-    {id:8, DueDate:daysOut(10), Title:"SOL watch — Gutierrez (potential new client)",                      Project:"Intake",                           Status:"Incomplete",  Category:"Intake",         Priority:"High",   Recurrence:null, Description:"Auto accident 11/02/2022. 2-yr IL SOL (735 ILCS 5/13-202) expires 11/02/2024. Decision on representation needed immediately. Govt entity involved? Check 745 ILCS 10/8-101 (1-yr)."},
-    {id:9, DueDate:daysOut(14), Title:"Depose treating physician — Okonkwo v. Guaranteed Rate",            Project:"Okonkwo v. Guaranteed Rate",       Status:"Incomplete",  Category:"Discovery",      Priority:"Medium", Recurrence:null, Description:"Schedule dep of Dr. Adeyemi at Rush Oak Park. Issue subpoena if not treating voluntarily. Confirm availability with defense counsel first."},
-    {id:10,DueDate:daysOut(21), Title:"Quarterly docket review",                                           Project:"Admin",                            Status:"Incomplete",  Category:"Admin",          Priority:"Low",    Recurrence:90,   Description:"Review all open matters. Update statute of limitations tracker. Flag any case with a deadline inside 60 days. Recurring every 90 days.",},
-    {id:11,DueDate:daysOut(28), Title:"File amended complaint — Kowalski v. City of Cicero",               Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"State Court",    Priority:"Medium", Recurrence:null, Description:"Add Monell claim after obtaining personnel file in discovery. 735 ILCS 5/2-616 amendment. Confirm leave of court required at this stage."},
-    {id:12,DueDate:daysOut(-12),Title:"Update retainer agreement — Patel intake",                          Project:"Intake",                           Status:"Complete",    Category:"Intake",         Priority:"Low",    Recurrence:null, Description:"Signed and filed. Conflicts check cleared."},
-    {id:13,DueDate:daysOut(3),  Title:"Review defense IME report — Mbeki v. Elmhurst Hosp.",               Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Medical",        Priority:"Medium", Recurrence:null, Description:"Defense IME by Dr. Nguyen received 11/01. Review for inconsistencies with treating physician records. Prepare rebuttal points for Dr. Patel."},
-    {id:14,DueDate:daysOut(45), Title:"Pretrial order deadline — Reyes v. North Shore Logistics",          Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Federal Court",  Priority:"Medium", Recurrence:null, Description:"N.D. Ill. LR 16.1 joint pretrial order. Coordinate with defense on jury instructions, exhibit list, witness list. Judge Seeger's template required."},
-    {id:15,DueDate:daysOut(6),  Title:"Client check-in call — Okonkwo",                                   Project:"Okonkwo v. Guaranteed Rate",       Status:"Incomplete",  Category:"Client",         Priority:"Low",    Recurrence:30,   Description:"Monthly update call. Discuss demand letter status, timeline to resolution. Recurring every 30 days."},
-    {id:16,DueDate:null,        Title:"Order certified copy of docket — Reyes v. North Shore Logistics",   Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Federal Court",  Priority:"Medium", Recurrence:null, Description:"Need full CM/ECF docket for client file. Order via PACER. No specific deadline but should be done before next status hearing."},
-    {id:17,DueDate:null,        Title:"Research punitive damages exposure — Kowalski v. City of Cicero",   Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"Research",       Priority:"Medium", Recurrence:null, Description:"Review Monell liability + punitive exposure under 42 U.S.C. § 1983. Illinois does not allow punitives against municipalities but individual officers may be liable. Memo to file."},
-    {id:18,DueDate:null,        Title:"Follow up on liens — Mbeki v. Elmhurst Hosp.",                     Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Medical",        Priority:"Low",    Recurrence:null, Description:"Check outstanding Medicare/Medicaid lien status. Request lien letter. Do not settle without resolving — mandatory reimbursement under 42 U.S.C. § 1395y."},
-    {id:19,DueDate:null,        Title:"Open new matter file — Torres (potential referral)",                Project:"Intake",                           Status:"Incomplete",  Category:"Intake",         Priority:"Medium", Recurrence:null, Description:"Referral from Dominguez & Assoc. Slip and fall at Midway Airport (City of Chicago). Confirm no 1-yr govt entity SOL issue under 745 ILCS 10/8-101 before accepting."},
-    {id:20,DueDate:null,        Title:"Update fee agreement template",                                     Project:"Admin",                            Status:"Incomplete",  Category:"Admin",          Priority:"Low",    Recurrence:null, Description:"Review standard 1/3 contingency agreement. Confirm language complies with IRPC 1.5(c). Add clause re: costs advanced vs. deducted from recovery."},
+    {id:1, DueDate:daysOut(-8), Title:"File appearance — Reyes v. North Shore Logistics",                   Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Task",  Priority:"High",   Recurrence:null, DaysToComplete:2, Description:"N.D. Ill. case no. 24-cv-4471. File attorney appearance with CM/ECF before local rule deadline expires."},
+    {id:2, DueDate:daysOut(-3), Title:"Respond to written discovery — Kowalski v. City of Cicero",          Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"Task",    Priority:"High",   Recurrence:null, DaysToComplete:3, Description:"Interrogatories and RFPs served 10/14. 28-day deadline under Ill. Sup. Ct. R. 213/214. Responses due, verify exact date against proof of service."},
+    {id:3, DueDate:daysOut(-1), Title:"Send HIPAA-compliant med records subpoena — Mbeki v. Elmhurst Hosp.",Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Task",        Priority:"High",   Recurrence:null, DaysToComplete:1, Description:"Subpoena Elmhurst Hospital records. Confirm HIPAA auth form signed. Follow up with records dept in 10 days if no response."},
+    {id:4, DueDate:daysOut(0),  Title:"File MIDP initial disclosures — Reyes v. North Shore Logistics",     Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Task",  Priority:"High",   Recurrence:null, DaysToComplete:2, Description:"N.D. Ill. Mandatory Initial Discovery Pilot (MIDP). Disclosures due today per Standing Order. See Judge Kendall's requirements."},
+    {id:5, DueDate:daysOut(2),  Title:"Draft demand letter — Okonkwo v. Guaranteed Rate",                  Project:"Okonkwo v. Guaranteed Rate",       Status:"Incomplete",  Category:"Task",       Priority:"Medium", Recurrence:null, DaysToComplete:4, Description:"PI demand. Summarize treatment, lost wages ($34k documented), pain and suffering. Include 2-yr SOL warning (735 ILCS 5/13-202). Send via certified mail."},
+    {id:6, DueDate:daysOut(5),  Title:"Expert disclosure deadline — Mbeki v. Elmhurst Hosp.",              Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Event",        Priority:"High",   Recurrence:null, DaysToComplete:8, Description:"FRCP 26(a)(2) disclosure. Retain and disclose Dr. Patel (orthopedic) as liability expert. Written report required 90 days before trial."},
+    {id:7, DueDate:daysOut(7),  Title:"File motion to extend discovery — Kowalski v. City of Cicero",      Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"Task",    Priority:"Medium", Recurrence:null, DaysToComplete:3, Description:"Defense stonewalling on document production. Draft 735 ILCS 5/2-1009 motion for 60-day extension. Need judge's standing order re: briefing schedule."},
+    {id:8, DueDate:daysOut(10), Title:"SOL watch — Gutierrez (potential new client)",                      Project:"Intake",                           Status:"Incomplete",  Category:"Question",         Priority:"High",   Recurrence:null, DaysToComplete:1, Description:"Auto accident 11/02/2022. 2-yr IL SOL (735 ILCS 5/13-202) expires 11/02/2024. Decision on representation needed immediately. Govt entity involved? Check 745 ILCS 10/8-101 (1-yr)."},
+    {id:9, DueDate:daysOut(14), Title:"Depose treating physician — Okonkwo v. Guaranteed Rate",            Project:"Okonkwo v. Guaranteed Rate",       Status:"Incomplete",  Category:"Event",      Priority:"Medium", Recurrence:null, DaysToComplete:2, Description:"Schedule dep of Dr. Adeyemi at Rush Oak Park. Issue subpoena if not treating voluntarily. Confirm availability with defense counsel first."},
+    {id:10,DueDate:daysOut(21), Title:"Quarterly docket review",                                           Project:"Admin",                            Status:"Incomplete",  Category:"Task",          Priority:"Low",    Recurrence:90,   DaysToComplete:1, Description:"Review all open matters. Update statute of limitations tracker. Flag any case with a deadline inside 60 days. Recurring every 90 days.",},
+    {id:11,DueDate:daysOut(28), Title:"File amended complaint — Kowalski v. City of Cicero",               Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"Task",    Priority:"Medium", Recurrence:null, DaysToComplete:5, Description:"Add Monell claim after obtaining personnel file in discovery. 735 ILCS 5/2-616 amendment. Confirm leave of court required at this stage."},
+    {id:12,DueDate:daysOut(-12),Title:"Update retainer agreement — Patel intake",                          Project:"Intake",                           Status:"Complete",    Category:"Task",         Priority:"Low",    Recurrence:null, DaysToComplete:0.5, Description:"Signed and filed. Conflicts check cleared."},
+    {id:13,DueDate:daysOut(3),  Title:"Review defense IME report — Mbeki v. Elmhurst Hosp.",               Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Question",        Priority:"Medium", Recurrence:null, DaysToComplete:5, Description:"Defense IME by Dr. Nguyen received 11/01. Review for inconsistencies with treating physician records. Prepare rebuttal points for Dr. Patel."},
+    {id:14,DueDate:daysOut(45), Title:"Pretrial order deadline — Reyes v. North Shore Logistics",          Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Event",  Priority:"Medium", Recurrence:null, DaysToComplete:10, Description:"N.D. Ill. LR 16.1 joint pretrial order. Coordinate with defense on jury instructions, exhibit list, witness list. Judge Seeger's template required."},
+    {id:15,DueDate:daysOut(6),  Title:"Client check-in call — Okonkwo",                                   Project:"Okonkwo v. Guaranteed Rate",       Status:"Incomplete",  Category:"Event",         Priority:"Low",    Recurrence:30,   DaysToComplete:0.5, Description:"Monthly update call. Discuss demand letter status, timeline to resolution. Recurring every 30 days."},
+    {id:16,DueDate:null,        Title:"Order certified copy of docket — Reyes v. North Shore Logistics",   Project:"Reyes v. North Shore Logistics",   Status:"Incomplete",  Category:"Task",  Priority:"Medium", Recurrence:null, DaysToComplete:1, Description:"Need full CM/ECF docket for client file. Order via PACER. No specific deadline but should be done before next status hearing."},
+    {id:17,DueDate:null,        Title:"Research punitive damages exposure — Kowalski v. City of Cicero",   Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"Question",       Priority:"Medium", Recurrence:null, DaysToComplete:3, Description:"Review Monell liability + punitive exposure under 42 U.S.C. § 1983. Illinois does not allow punitives against municipalities but individual officers may be liable. Memo to file."},
+    {id:18,DueDate:null,        Title:"Follow up on liens — Mbeki v. Elmhurst Hosp.",                     Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Task",        Priority:"Low",    Recurrence:null, DaysToComplete:1, Description:"Check outstanding Medicare/Medicaid lien status. Request lien letter. Do not settle without resolving — mandatory reimbursement under 42 U.S.C. § 1395y."},
+    {id:19,DueDate:null,        Title:"Open new matter file — Torres (potential referral)",                Project:"Intake",                           Status:"Incomplete",  Category:"Idea",         Priority:"Medium", Recurrence:null, DaysToComplete:2, Description:"Referral from Dominguez & Assoc. Slip and fall at Midway Airport (City of Chicago). Confirm no 1-yr govt entity SOL issue under 745 ILCS 10/8-101 before accepting."},
+    {id:21,DueDate:daysOut(-38), Title:"Answer affirmative defenses — Kowalski v. City of Cicero",       Project:"Kowalski v. City of Cicero",       Status:"Incomplete",  Category:"Task",       Priority:"High",   Recurrence:null, DaysToComplete:2, Description:"Badly overdue. Defense filed affirmative defenses 38 days ago; reply is long past due. Move to strike or reply immediately."},
+    {id:22,DueDate:daysOut(-74), Title:"Serve Rule 213(f) witness disclosures — Mbeki v. Elmhurst Hosp.",  Project:"Mbeki v. Elmhurst Hosp.",          Status:"Incomplete",  Category:"Task",       Priority:"High",   Recurrence:null, DaysToComplete:3, Description:"CRITICAL. Ill. S. Ct. R. 213(f) witness disclosures were due over two months ago. Exposure to motion to bar witnesses. Address today."},
+    {id:23,DueDate:daysOut(-91), Title:"Respond to motion to dismiss — Okonkwo v. Guaranteed Rate",        Project:"Okonkwo v. Guaranteed Rate",       Status:"Incomplete",  Category:"Task",       Priority:"High",   Recurrence:null, DaysToComplete:5, Description:"CRITICAL. Response to 2-615 motion is 91 days late. Check whether dismissal was already entered. Potential malpractice exposure — escalate."},
+    {id:20,DueDate:null,        Title:"Update fee agreement template",                                     Project:"Admin",                            Status:"Incomplete",  Category:"Purchase",          Priority:"Low",    Recurrence:null, DaysToComplete:2, Description:"Review standard 1/3 contingency agreement. Confirm language complies with IRPC 1.5(c). Add clause re: costs advanced vs. deducted from recovery."},
   ];
 
   // Seed canonical lists (mirrors what Grist Choice column metadata would provide)
   state.choiceStatus=["Incomplete","In Progress","Waiting","Blocked","Complete","Cancelled"];
-  state.choiceCategory=["Federal Court","State Court","Medical","Discovery","Research","Pre-Suit","Intake","Client","Admin"];
+  state.choiceCategory=["Task","Idea","Question","Event","Purchase"];
+  // Priority is a fixed three-value set (PRIORITIES) — not configurable.
   state.choiceProject=["Reyes v. North Shore Logistics","Kowalski v. City of Cicero","Mbeki v. Elmhurst Hosp.","Okonkwo v. Guaranteed Rate","Intake","Admin"];
-  const DEMO_COLS={DueDate:"DueDate",Title:"Title",Project:"Project",Status:"Status",Category:"Category",Priority:"Priority",Recurrence:"Recurrence",Description:"Description",AssignedDate:null};
+  const DEMO_COLS={DueDate:"DueDate",Title:"Title",Project:"Project",Status:"Status",Category:"Category",Priority:"Priority",Recurrence:"Recurrence",Description:"Description",DaysToComplete:"DaysToComplete",AssignedDate:null};
   const demoMappings=Object.fromEntries(Object.entries(DEMO_COLS).filter(([,v])=>v));
   ingest(demoData.map(r=>{const out={id:r.id};Object.keys(DEMO_COLS).forEach(k=>{if(DEMO_COLS[k])out[DEMO_COLS[k]]=r[k]??null;});return out;}),demoMappings);
 
@@ -858,7 +1607,22 @@ if(state.haveGrist){
   const _wf=writeField;
   writeField=async(rowId,colId,value)=>{const colName=Object.keys(DEMO_COLS).find(k=>DEMO_COLS[k]===colId);window._demoWriteField(rowId,colName||colId,value);};
   createTask=async(fields)=>window._demoCreate(fields);
-  deleteTask=async(rowId,title)=>{const label=title&&String(title).trim()?"\u201c"+String(title).trim()+"\u201d":"this task";if(!confirm("Permanently delete "+label+"?\n\nThis cannot be undone."))return;window._demoDestroy(rowId);};
+  bulkDelete=async(rowId)=>{window._demoDestroy(rowId);};
+  deleteTask=async(rowId,title)=>{
+    const label=title&&String(title).trim()?"\u201c"+String(title).trim()+"\u201d":"this task";
+    if(!confirm("Delete "+label+"?"))return;
+    const r=state.records.find(x=>x.id===rowId);
+    const snap=r?[{fields:rawFieldsOf(r)}]:[];
+    window._demoDestroy(rowId);
+    pushUndo("Deleted "+label,()=>recreateRecords(snap));
+  };
+  // undo needs an in-memory restore path too
+  restoreFields=async(rowId,fields)=>{
+    Object.keys(fields).forEach(colId=>{
+      const colName=Object.keys(DEMO_COLS).find(k=>DEMO_COLS[k]===colId)||colId;
+      window._demoWriteField(rowId,colName,fields[colId]);
+    });
+  };
 
   // Mark demo mode in header
   state.demoMode=true;
