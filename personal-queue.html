@@ -18,7 +18,7 @@
   *{box-sizing:border-box;} html,body{margin:0;height:100%;}
   body{font-family:var(--ui);color:var(--ink);background:var(--bg);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased;}
   #app{min-height:100vh;}
-  .wrap{padding:14px 16px 28px;max-width:720px;margin:0 auto;}
+  .wrap{padding:14px 16px 28px;max-width:940px;margin:0 auto;}
   h1{font-family:var(--display);font-size:22px;margin:2px 0;}
   .sub{color:var(--ink-faint);margin:0 0 12px;}
   .notice{padding:28px;max-width:460px;margin:24px auto;text-align:center;color:var(--ink-soft);}
@@ -152,6 +152,38 @@
   /* --- focus-visible (a11y) --- */
   button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
+  /* --- ongoing (no due date) --- */
+  .badge.ongoing{background:#eef1f4;color:#5b6b7a;border:1px solid #d5dde4;font-weight:600;}
+  .row.ongoing-row{border-left-color:#a9b6c2!important;}
+  .de-none{border:1px solid var(--line-strong);background:#fff;border-radius:6px;padding:6px 8px;cursor:pointer;font:inherit;font-size:11.5px;color:var(--ink-soft);width:100%;text-align:center;}
+  .de-none:hover{background:#eef1f4;border-color:#a9b6c2;color:#42505c;}
+  .de-none.on{background:#eef1f4;border-color:#a9b6c2;color:#42505c;font-weight:600;}
+  .nodue-lab{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink-soft);text-transform:none;letter-spacing:0;min-width:0;cursor:pointer;white-space:nowrap;}
+  .nodue-lab input{cursor:pointer;accent-color:var(--accent);}
+
+  /* --- unified edit panel --- */
+  .editbtn{flex:none;border:0;background:transparent;color:var(--ink-faint);font-size:14px;padding:4px 6px;cursor:pointer;border-radius:6px;opacity:.5;line-height:1;}
+  .editbtn:hover{background:var(--accent-soft);color:var(--accent);opacity:1;}
+  .editbtn.on{background:var(--accent);color:#fff;opacity:1;}
+  .editpanel{margin-top:8px;background:#fff;border:1px solid var(--line-strong);border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
+  .ep-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .ep-row label{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);min-width:64px;flex:none;}
+  .ep-in{font:inherit;font-size:12.5px;padding:5px 8px;border:1px solid var(--line-strong);border-radius:6px;flex:1;min-width:0;background:#fff;}
+  .ep-in:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft);}
+  .ep-in:disabled{background:#f3f5f3;color:var(--ink-faint);}
+  .ep-sm{flex:none;width:120px;}
+  .ep-ta{flex:1 1 100%;min-height:56px;resize:vertical;}
+  .ep-add{flex:1 1 100%;margin-top:4px;}
+  .ep-hint{font-size:11px;color:var(--ink-faint);}
+  .ep-quick{display:flex;gap:4px;}
+  .ep-quick button{border:1px solid var(--line-strong);background:#f6f8f6;border-radius:20px;padding:2px 8px;font:inherit;font-size:10.5px;cursor:pointer;color:var(--ink-soft);}
+  .ep-quick button:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+  .ep-check{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink-soft);text-transform:none;letter-spacing:0;min-width:0;cursor:pointer;white-space:nowrap;}
+  .ep-check input{cursor:pointer;accent-color:var(--accent);}
+  .ep-chips{display:flex;flex-wrap:wrap;gap:5px;flex:1;}
+  .ep-actions{display:flex;gap:6px;margin-top:2px;padding-top:8px;border-top:1px solid var(--line);}
+  .ep-actions button{border:1px solid var(--line-strong);border-radius:6px;padding:6px 16px;cursor:pointer;font:inherit;font-size:12.5px;}
+
   /* --- keyboard focus --- */
   .row.kfocus{outline:2px solid var(--accent);outline-offset:1px;}
 
@@ -170,10 +202,31 @@
   /* --- help --- */
   .hkbtn{border:1px solid var(--line-strong);background:#fff;color:var(--ink-soft);border-radius:50%;width:26px;height:26px;font:inherit;font-weight:600;cursor:pointer;line-height:1;}
   .hkbtn:hover{border-color:var(--accent);color:var(--accent);}
-  .helppanel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
-  .helpgrid{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;}
-  .helpgrid kbd{background:#fff;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 7px;font:inherit;font-size:11px;font-weight:600;color:var(--ink);white-space:nowrap;text-align:center;}
-  .helpgrid span{font-size:12px;color:var(--ink-soft);}
+  /* --- two-column body: list + hotkey rail --- */
+  .body{display:grid;grid-template-columns:1fr 190px;gap:16px;align-items:start;}
+  .body.railclosed{grid-template-columns:1fr 30px;}
+  .listcol{min-width:0;}
+
+  .rail{position:sticky;top:calc(var(--headh,0px) + 8px);display:flex;gap:6px;align-items:flex-start;}
+  .rail.closed{justify-content:flex-end;}
+  .railtab{flex:none;border:1px solid var(--line-strong);background:#fff;color:var(--ink-faint);border-radius:7px;
+           width:26px;height:26px;font:inherit;font-size:13px;line-height:1;cursor:pointer;padding:0;}
+  .railtab:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
+  .railbody{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .railhd{font-family:var(--display);font-size:14px;color:var(--ink);margin-bottom:8px;}
+  .railgrp{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin:9px 0 4px;}
+  .railgrp:first-of-type{margin-top:0;}
+  .railgrid{display:grid;grid-template-columns:auto 1fr;gap:4px 8px;align-items:center;}
+  .railgrid kbd{background:#fff;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:4px;
+                padding:1px 6px;font:inherit;font-size:10.5px;font-weight:600;color:var(--ink);white-space:nowrap;text-align:center;min-width:16px;}
+  .railgrid span{font-size:11.5px;color:var(--ink-soft);line-height:1.3;}
+  .railnote{margin-top:10px;padding-top:8px;border-top:1px solid var(--line);font-size:10.5px;color:var(--ink-faint);line-height:1.35;}
+
+  /* narrow viewports: drop the rail below the list */
+  @media (max-width:760px){
+    .body,.body.railclosed{grid-template-columns:1fr;}
+    .rail{position:static;margin-top:12px;}
+  }
   .head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .head-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .demobadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--warn-soft);color:var(--warn);border:1px solid #e6d0a0;letter-spacing:.03em;white-space:nowrap;}
@@ -265,11 +318,11 @@ const state = {
   typesChecked: false,
   // queue settings (persisted)
   projects: [], categories: [], timing: "all", sort: "due", count: 5, limit: true, randSeed: "seed1", upWindow: 0,
-  search: "", shuffled: false, showHelp: false, statView: null, headCollapsed: false,
+  search: "", shuffled: false, railOpen: true, statView: null, headCollapsed: false,
   selected: new Set(),          // bulk-action selection
   focusIdx: -1,                 // keyboard cursor
   // transient editor state
-  openStatusRow: null, openDateRow: null, openSnoozeRow: null, openDtcRow: null, editingDescRow: null, editingCatRow: null, editingPriRow: null, editingProjRow: null, editingRecRow: null, editingTitleRow: null,
+  openStatusRow: null, openDateRow: null, openSnoozeRow: null, openDtcRow: null, editingRow: null,
   expandedRows: new Set(),
   creating: false, newDraft: null,            // "New task" form
   undo: null, undoTimer: null,                // undo toast
@@ -341,10 +394,28 @@ function stripeColor(r,kind){
 /* timing */
 function todayN(){const d=new Date();return d.getFullYear()*10000+d.getMonth()*100+d.getDate();}
 function dueN(due){return due.y*10000+due.mo*100+due.d;}
+/* ---- Undated tasks ----
+   A task with no due date is an ONGOING task: something to track, but never
+   something that should pull attention away from a real deadline. It is never
+   overdue, never pinned, never "at risk", and carries the lowest possible
+   selection weight. It has no timing classification at all. */
+function isUndated(r){return !r.due;}
 function todayDue(){const n=new Date();return{y:n.getFullYear(),mo:n.getMonth(),d:n.getDate(),minuteOfDay:-1,timed:false,timeStr:null,raw:null};}
-function effectiveDue(r){return r.due||todayDue();}
-function timingOf(r){const t=todayN(),v=dueN(effectiveDue(r));if(v<t)return "overdue";if(v===t)return "today";return "upcoming";}
-function daysDiff(r){const due=effectiveDue(r);const a=new Date(due.y,due.mo,due.d);const n=new Date();const b=new Date(n.getFullYear(),n.getMonth(),n.getDate());return Math.round((a-b)/86400000);}
+function timingOf(r){
+  if(isUndated(r))return "ongoing";                 // its own bucket, not "today"
+  const t=todayN(),v=dueN(r.due);
+  if(v<t)return "overdue";
+  if(v===t)return "today";
+  return "upcoming";
+}
+/* Days until due. null for undated tasks — there is nothing to count down to. */
+function daysDiff(r){
+  if(isUndated(r))return null;
+  const due=r.due;
+  const a=new Date(due.y,due.mo,due.d);const n=new Date();
+  const b=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+  return Math.round((a-b)/86400000);
+}
 
 /* ===================== Grist read ===================== */
 function pick(rec,m,k){const real=m?m[k]:null;if(real===undefined||real===null)return undefined;if(Array.isArray(real))return real.map(c=>rec[c]);return rec[real];}
@@ -428,7 +499,7 @@ function setRecurrence(id,n){if(state.mapped.Recurrence)writeField(id,state.cols
 function setCategory(id,arr){if(state.mapped.Category)writeField(id,state.cols.Category,encodeMulti(arr,state.catMulti),"category");}
 function setPriority(id,v){if(!state.mapped.Priority)return;writeField(id,state.cols.Priority,(v&&PRIORITIES.indexOf(v)>=0)?v:null,"priority");}
 
-function persist(){if(!state.haveGrist)return;try{grist.setOptions({projects:state.projects,categories:state.categories,timing:state.timing,sort:state.sort,count:state.count,limit:state.limit,randSeed:state.randSeed,upWindow:state.upWindow,shuffled:state.shuffled,statView:state.statView,headCollapsed:state.headCollapsed});}catch(e){}}
+function persist(){if(!state.haveGrist)return;try{grist.setOptions({projects:state.projects,categories:state.categories,timing:state.timing,sort:state.sort,count:state.count,limit:state.limit,randSeed:state.randSeed,upWindow:state.upWindow,shuffled:state.shuffled,statView:state.statView,headCollapsed:state.headCollapsed,railOpen:state.railOpen});}catch(e){}}
 
 function encodeDateObj(d){if(state.dueIsDateTime)return new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0).getTime()/1000;return Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/1000;}
 async function createTask(fields){
@@ -505,10 +576,18 @@ function eligible(r){
   // "Upcoming, due within 14 days" quietly drop a 91-day-late filing.
   if(isPinned(r))return true;
   const t=timingOf(r);
-  if(state.timing==="overdue"&&t!=="overdue")return false;
-  if(state.timing==="upcoming"&&t==="overdue")return false;
-  if(state.timing==="upcoming"&&state.upWindow>0&&daysDiff(r)>state.upWindow)return false;
-  return true;
+  if(state.timing==="ongoing")return t==="ongoing";   // undated only
+  if(state.timing==="overdue")return t==="overdue";
+  if(state.timing==="upcoming"){
+    if(t==="ongoing")return false;                    // undated has no deadline to be "upcoming"
+    if(t==="overdue")return false;
+    if(state.upWindow>0){
+      const d=daysDiff(r);                            // never null here: t is today/upcoming
+      if(d>state.upWindow)return false;
+    }
+    return true;
+  }
+  return true;                                        // "all" — includes ongoing
 }
 function hashf(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0)/4294967296;}
 function randKey(id){return hashf(state.randSeed+":"+id);}
@@ -530,16 +609,20 @@ function daysToComplete(r){
   return (isFinite(n)&&n>=0)?n:null;
 }
 function hasRealDeadline(r){return !!r.due;}          // no due date -> no runway pressure
-function daysRemaining(r){return daysDiff(r);}        // negative once overdue
+function daysRemaining(r){return daysDiff(r);}        // null when undated; negative once overdue
 function isAtRisk(r){
   const need=daysToComplete(r);
   if(need===null)return false;
-  if(!hasRealDeadline(r))return false;                // undated: treat as no deadline pressure
+  if(!hasRealDeadline(r))return false;                // undated: no deadline to be at risk against
   const left=daysRemaining(r);
   if(left<0)return false;                             // already overdue -> handled by band 3
   return need>=left;                                  // cannot finish in the time left
 }
+/* Urgency bands, highest first:
+     3 = overdue     2 = at risk     1 = comfortable (has a deadline, has runway)
+     0 = ongoing     (no due date — tracked, but never allowed to compete) */
 function urgencyBand(r){
+  if(isUndated(r))return 0;
   if(timingOf(r)==="overdue")return 3;
   if(isAtRisk(r))return 2;
   return 1;
@@ -552,8 +635,13 @@ function slackDays(r){
 }
 
 const PIN_TIER=4;
-function overdueDays(r){const d=daysDiff(r);return d<0?Math.abs(d):0;}
+function overdueDays(r){
+  if(isUndated(r))return 0;                           // undated is never overdue
+  const d=daysDiff(r);
+  return (d!==null&&d<0)?Math.abs(d):0;
+}
 function overdueTier(r){
+  if(isUndated(r))return 0;
   const d=overdueDays(r);
   if(d<=0)return 0;
   if(d<7)return 1;
@@ -561,19 +649,21 @@ function overdueTier(r){
   if(d<60)return 3;
   return 4;
 }
-function isPinned(r){return overdueTier(r)>=PIN_TIER;}
+function isPinned(r){return !isUndated(r)&&overdueTier(r)>=PIN_TIER;}
 /* Selection weight: higher = likelier to surface in a shuffle.
-   Band dominates (overdue > at-risk > comfortable); overdue depth and
-   priority refine within a band. */
+   Band dominates (overdue > at-risk > comfortable > ongoing). An undated task
+   carries the floor weight: it stays visible, but never outranks real work. */
 function shuffleWeight(r){
   const band=urgencyBand(r);
   let w;
-  if(band===3){
-    w=[0,8,14,22,40][overdueTier(r)];          // overdue: escalates with depth
+  if(band===0){
+    return 0.25;                                 // ongoing: floor. Priority does NOT boost it.
+  }else if(band===3){
+    w=[0,8,14,22,40][overdueTier(r)];            // overdue: escalates with depth
   }else if(band===2){
-    const s=slackDays(r);                       // 0 or negative
+    const s=slackDays(r);                        // 0 or negative
     const shortBy=(s===null)?0:Math.max(0,-s);
-    w=4+Math.min(shortBy,10)*0.4;               // 4.0 -> 8.0 as it falls further behind
+    w=4+Math.min(shortBy,10)*0.4;                // 4.0 -> 8.0 as it falls further behind
   }else{
     w=1;
   }
@@ -601,13 +691,16 @@ function weightedPick(list,n,seed){
   return out;
 }
 function assignedVal(r){return (typeof r.assignedRaw==="number")?r.assignedRaw:-Infinity;}
+/* Sort key for due date. Undated tasks sort to the very end — they have no
+   deadline to be ordered by, and shouldn't sit above dated work. */
+function dueSortKey(r){return isUndated(r)?Infinity:dueN(r.due);}
 function sortQueue(list){
   const arr=list.slice();
-  if(state.sort==="due")arr.sort((a,b)=>dueN(effectiveDue(a))-dueN(effectiveDue(b))||String(a.title).localeCompare(String(b.title)));
+  if(state.sort==="due")arr.sort((a,b)=>dueSortKey(a)-dueSortKey(b)||String(a.title).localeCompare(String(b.title)));
   else if(state.sort==="assigned-new")arr.sort((a,b)=>assignedVal(b)-assignedVal(a));
   else if(state.sort==="assigned-old")arr.sort((a,b)=>{const av=assignedVal(a),bv=assignedVal(b);return (av===-Infinity?Infinity:av)-(bv===-Infinity?Infinity:bv);});
-  else if(state.sort==="overdue")arr.sort((a,b)=>overdueTier(b)-overdueTier(a)||overdueDays(b)-overdueDays(a)||dueN(effectiveDue(a))-dueN(effectiveDue(b)));
-  else if(state.sort==="risk")arr.sort((a,b)=>urgencyBand(b)-urgencyBand(a)||shuffleWeight(b)-shuffleWeight(a)||dueN(effectiveDue(a))-dueN(effectiveDue(b)));
+  else if(state.sort==="overdue")arr.sort((a,b)=>overdueTier(b)-overdueTier(a)||overdueDays(b)-overdueDays(a)||dueSortKey(a)-dueSortKey(b));
+  else if(state.sort==="risk")arr.sort((a,b)=>urgencyBand(b)-urgencyBand(a)||shuffleWeight(b)-shuffleWeight(a)||dueSortKey(a)-dueSortKey(b));
   else if(state.sort==="random")arr.sort((a,b)=>randKey(a.id)-randKey(b.id));
   return arr;
 }
@@ -731,6 +824,7 @@ const STAT_VIEWS={
   overdue:   {label:"overdue",   match:r=>!isDoneOrCancelled(r)&&timingOf(r)==="overdue"},
   critical:  {label:"critical",  match:r=>!isDoneOrCancelled(r)&&isPinned(r)},
   atrisk:    {label:"at risk",   match:r=>!isDoneOrCancelled(r)&&isAtRisk(r)},
+  ongoing:   {label:"ongoing",   match:r=>!isDoneOrCancelled(r)&&isUndated(r)},
   oldest:    {label:"oldest overdue", match:r=>{
                 if(isDoneOrCancelled(r))return false;
                 const open=state.records.filter(x=>!isDoneOrCancelled(x));
@@ -778,6 +872,7 @@ function statsStrip(){
   add("overdue","overdue",overdue.length,overdue.length?"stat-warn":"");
   if(crit.length)add("critical","critical",crit.length,"stat-crit");
   if(state.mapped.DaysToComplete){const atr=open.filter(isAtRisk);if(atr.length)add("atrisk","at risk",atr.length,"stat-warn");}
+  {const ong=open.filter(isUndated);if(ong.length)add("ongoing","ongoing",ong.length);}
   add("oldest",oldest===1?"day oldest overdue":"days oldest overdue",oldest,oldest>=60?"stat-crit":(oldest>=30?"stat-warn":""));
   add("completed",doneLabel,doneRecent);
   return s;
@@ -894,18 +989,44 @@ document.addEventListener("keydown",(e)=>{
     case "d": case "D": {const r=cur();if(!r)break;e.preventDefault();duplicateTask(r);break;}
     case "n": case "N": e.preventDefault();state.creating=true;state.newDraft=null;render();break;
     case "Escape": state.focusIdx=-1;state.selected.clear();clearTransient();render();break;
-    case "?": e.preventDefault();state.showHelp=!state.showHelp;render();break;
+    case "?": e.preventDefault();state.railOpen=!state.railOpen;persist();render();break;
     case "z": case "Z": if((e.metaKey||e.ctrlKey)&&state.undo){e.preventDefault();runUndo();}break;
   }
 });
-function helpPanel(){
-  const h=el("div","helppanel");
-  h.appendChild(Object.assign(el("div","ctl-label"),{textContent:"Keyboard shortcuts"}));
-  const rows=[["J / \u2193","next task"],["K / \u2191","previous task"],["C","mark complete"],["E","edit title"],["S","snooze 1 day"],["X","select for bulk action"],["N","new task"],["/","search"],["Esc","clear focus & selection"],["\u2318/Ctrl+Z","undo last action"],["D","duplicate task"],["?","toggle this panel"]];
-  const g=el("div","helpgrid");
-  rows.forEach(([k,v])=>{g.appendChild(Object.assign(el("kbd"),{textContent:k}));g.appendChild(Object.assign(el("span"),{textContent:v}));});
-  h.appendChild(g);
-  return h;
+/* Side legend: a persistent, collapsible hotkey reference beside the list. */
+const HOTKEY_GROUPS=[
+  {title:"Move",  keys:[["J","next task"],["K","previous task"],["Esc","clear focus"]]},
+  {title:"Change a task", keys:[["C","complete"],["E","edit task"],["S","snooze 1 day"],["D","duplicate"]]},
+  {title:"Batch", keys:[["X","select / deselect"]]},
+  {title:"Other", keys:[["N","new task"],["/","search"],["\u2318Z","undo"],["?","hide this"]]},
+];
+function helpRail(){
+  const rail=el("aside","rail"+(state.railOpen?"":" closed"));
+  rail.setAttribute("aria-label","Keyboard shortcuts");
+
+  const tab=el("button","railtab");
+  tab.textContent=state.railOpen?"\u203A":"\u2328";
+  tab.title=state.railOpen?"Hide shortcuts":"Show keyboard shortcuts";
+  tab.setAttribute("aria-expanded",state.railOpen?"true":"false");
+  tab.onclick=()=>{state.railOpen=!state.railOpen;persist();render();};
+  rail.appendChild(tab);
+
+  if(state.railOpen){
+    const body=el("div","railbody");
+    body.appendChild(Object.assign(el("div","railhd"),{textContent:"Shortcuts"}));
+    HOTKEY_GROUPS.forEach(g=>{
+      body.appendChild(Object.assign(el("div","railgrp"),{textContent:g.title}));
+      const grid=el("div","railgrid");
+      g.keys.forEach(([k,v])=>{
+        grid.appendChild(Object.assign(el("kbd"),{textContent:k}));
+        grid.appendChild(Object.assign(el("span"),{textContent:v}));
+      });
+      body.appendChild(grid);
+    });
+    body.appendChild(Object.assign(el("div","railnote"),{textContent:"Keys act on the focused card (J/K to move)."}));
+    rail.appendChild(body);
+  }
+  return rail;
 }
 
 /* ===================== Render ===================== */
@@ -916,7 +1037,7 @@ function render(){
   head.appendChild(Object.assign(el("h1"),{textContent:"My Work Queue"}));
   const hright=el("div","head-right");
   if(state.demoMode){const db=el("span","demobadge");db.textContent="DEMO \u2014 fake IL/N.D.Ill. data";hright.appendChild(db);}
-  const hk=el("button","hkbtn");hk.textContent="?";hk.title="Keyboard shortcuts";hk.onclick=()=>{state.showHelp=!state.showHelp;render();};hright.appendChild(hk);
+  const hk=el("button","hkbtn");hk.textContent="?";hk.title="Keyboard shortcuts";hk.setAttribute("aria-pressed",state.railOpen?"true":"false");hk.onclick=()=>{state.railOpen=!state.railOpen;persist();render();};hright.appendChild(hk);
   const newBtn=el("button","newbtn");newBtn.textContent="\uFF0B New task";
   newBtn.onclick=()=>{state.creating=true;state.newDraft=null;render();};
   hright.appendChild(newBtn);head.appendChild(hright);
@@ -929,7 +1050,6 @@ function render(){
     root.appendChild(c);return;
   }
   if(state.creating)root.appendChild(newTaskForm());
-  if(state.showHelp)root.appendChild(helpPanel());
   // Stats, search, and filters pin together as one sticky header.
   const sticky=el("div","stickyhead"+(state.headCollapsed?" collapsed":""));
   sticky.id="stickyhead";
@@ -945,12 +1065,19 @@ function render(){
   tg.appendChild(tb);sticky.appendChild(tg);
   root.appendChild(sticky);
 
+  // Two columns: the task list, and a collapsible hotkey legend beside it.
+  const body=el("div","body"+(state.railOpen?"":" railclosed"));
+  const col=el("div","listcol");
+  root.appendChild(body);
+  body.appendChild(col);
+  body.appendChild(helpRail());
+
   const all=queueList();
   const shown=shownList(all);
   // prune stale selections
   const shownIds=new Set(shown.map(r=>r.id));
   Array.from(state.selected).forEach(id=>{if(!shownIds.has(id))state.selected.delete(id);});
-  if(state.selected.size)root.appendChild(bulkBar(shown));
+  if(state.selected.size)col.appendChild(bulkBar(shown));
 
   const meta=el("div","meta");
   const who=state.projects.length?state.projects.join(", "):"all projects";
@@ -966,7 +1093,7 @@ function render(){
     const pinNote=pinCount?(" \u00b7 "+pinCount+" pinned"+(overriding?" (shown despite filter)":"")):"";
     meta.textContent=(state.limit?("Showing "+shown.length+" of "+all.length):("Showing all "+all.length))+tail+pinNote;
   }
-  root.appendChild(meta);
+  col.appendChild(meta);
 
   const q=el("div","queue");
   if(!shown.length){
@@ -993,8 +1120,8 @@ function render(){
     }
   }
   else shown.forEach((r,i)=>q.appendChild(taskCard(r,i)));
-  root.appendChild(q);
-  if(state.undo)root.appendChild(undoToast());
+  col.appendChild(q);
+  if(state.undo)col.appendChild(undoToast());
   attachStickyWatch();
   syncHeadHeight();
 }
@@ -1036,7 +1163,7 @@ function controls(){
   // Timing
   const tf=el("div","field");tf.appendChild(Object.assign(el("div","ctl-label"),{textContent:"Show"}));
   const seg=el("div","seg");
-  [["all","All"],["overdue","Overdue"],["upcoming","Upcoming"]].forEach(o=>{const b=el("button",state.timing===o[0]?"active":"");b.textContent=o[1];b.onclick=()=>{state.timing=o[0];persist();render();};seg.appendChild(b);});
+  [["all","All"],["overdue","Overdue"],["upcoming","Upcoming"],["ongoing","Ongoing"]].forEach(o=>{const b=el("button",state.timing===o[0]?"active":"");b.textContent=o[1];b.onclick=()=>{state.timing=o[0];persist();render();};seg.appendChild(b);});
   tf.appendChild(seg);
   if(state.timing==="upcoming"){
     const wrow=el("div","upwindow-row");
@@ -1097,14 +1224,23 @@ function controls(){
 /* ----- create a new task directly from the widget ----- */
 function nfLine(labelText){const r=el("div","nrow");r.appendChild(Object.assign(el("label"),{textContent:labelText}));return r;}
 function newTaskForm(){
-  const d=state.newDraft||(state.newDraft={date:iso(new Date()),time:"09:00",title:"",project:"",status:"",category:"",priority:"",priBool:false,recur:"",dtc:"",description:""});
+  const d=state.newDraft||(state.newDraft={date:iso(new Date()),time:"09:00",noDue:false,title:"",project:"",status:"",category:"",priority:"",priBool:false,recur:"",dtc:"",description:""});
   const box=el("div","controls newform");
   box.appendChild(Object.assign(el("div","ctl-label"),{textContent:"New task"}));
   // Title
   {const r=nfLine("Title");const i=document.createElement("input");i.type="text";i.className="ntf";i.placeholder="What needs doing";i.value=d.title;i.oninput=()=>d.title=i.value;r.appendChild(i);box.appendChild(r);}
   // Due (+ time)
-  {const r=nfLine("Due");const di=document.createElement("input");di.type="date";di.className="ntf small";di.value=d.date;di.oninput=()=>d.date=di.value;r.appendChild(di);
-   if(state.dueIsDateTime){const ti=document.createElement("input");ti.type="time";ti.className="ntf small";ti.value=d.time;ti.oninput=()=>d.time=ti.value;r.appendChild(ti);}box.appendChild(r);}
+  {const r=nfLine("Due");
+   const di=document.createElement("input");di.type="date";di.className="ntf small";di.value=d.date;di.disabled=!!d.noDue;
+   di.oninput=()=>d.date=di.value;r.appendChild(di);
+   let ti=null;
+   if(state.dueIsDateTime){ti=document.createElement("input");ti.type="time";ti.className="ntf small";ti.value=d.time;ti.disabled=!!d.noDue;ti.oninput=()=>d.time=ti.value;r.appendChild(ti);}
+   const lab=document.createElement("label");lab.className="nodue-lab";
+   const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!d.noDue;
+   cb.onchange=()=>{d.noDue=cb.checked;di.disabled=cb.checked;if(ti)ti.disabled=cb.checked;};
+   lab.append(cb,document.createTextNode(" No due date (ongoing)"));
+   r.appendChild(lab);
+   box.appendChild(r);}
   // Project
   if(state.mapped.Project){
     const r=nfLine("Project");
@@ -1162,10 +1298,10 @@ function newTaskForm(){
 function submitNewTask(){
   const d=state.newDraft||{};
   if(!d.title||!d.title.trim()){alert("Give the task a title.");return;}
-  if(!d.date){alert("Pick a due date.");return;}
+  // A task with no due date is valid: it becomes an ongoing task.
   const fields={};
   fields[state.cols.Title]=d.title.trim();
-  fields[state.cols.DueDate]=encodeDue(d.date,state.dueIsDateTime?(d.time||"09:00"):null);
+  fields[state.cols.DueDate]=(d.noDue||!d.date)?null:encodeDue(d.date,state.dueIsDateTime?(d.time||"09:00"):null);
   if(state.mapped.Project&&d.project&&d.project.trim())fields[state.cols.Project]=d.project.trim();
   if(state.mapped.Status&&d.status)fields[state.cols.Status]=d.status;
   if(state.mapped.Category&&d.category&&d.category.trim())fields[state.cols.Category]=encodeMulti([d.category.trim()],state.catMulti);
@@ -1185,8 +1321,8 @@ function taskCard(r,idx){
   const expanded=state.expandedRows.has(r.id);
   const tier=overdueTier(r);
   const pinned=isPinned(r);
-  const editingDesc=state.editingDescRow===r.id,editingCat=state.editingCatRow===r.id,editingPri=state.editingPriRow===r.id,editingProj=state.editingProjRow===r.id,editingRec=state.editingRecRow===r.id,editingTitle=state.editingTitleRow===r.id;
-  const row=el("div","row "+kind+(expanded?" expanded":"")+(tier?" od"+tier:"")+(pinned?" pinned":"")+(state.focusIdx===idx?" kfocus":""));
+  const editing=state.editingRow===r.id;
+  const row=el("div","row "+kind+(expanded?" expanded":"")+(tier?" od"+tier:"")+(pinned?" pinned":"")+(isUndated(r)?" ongoing-row":"")+(state.focusIdx===idx?" kfocus":""));
   row.dataset.idx=idx;
   if(!tier)row.style.borderLeftColor=stripeColor(r,kind);
 
@@ -1202,7 +1338,12 @@ function taskCard(r,idx){
   const main=el("div","main");
   const top=el("div","topline");
   const t=timingOf(r);const dd=daysDiff(r);
-  if(t==="overdue"){
+  if(t==="ongoing"){
+    const ob=Object.assign(el("span","badge ongoing"),{textContent:"\u221E Ongoing"});
+    ob.title="No due date \u2014 tracked, but never treated as urgent.";
+    top.appendChild(ob);
+  }
+  else if(t==="overdue"){
     const od=overdueDays(r);
     const lbl=["","Overdue","Overdue","Badly overdue","CRITICALLY OVERDUE"][tier];
     top.appendChild(Object.assign(el("span","badge over od"+tier),{textContent:lbl+" \u00b7 "+od+"d"}));
@@ -1213,66 +1354,249 @@ function taskCard(r,idx){
   else top.appendChild(Object.assign(el("span","badge up"),{textContent:"In "+dd+" day"+(dd===1?"":"s")}));
   if(isAtRisk(r)){const sl=slackDays(r);
     top.appendChild(Object.assign(el("span","badge risk"),{textContent:"\u26A0 At risk"+(sl<0?(" \u00b7 "+Math.abs(sl)+"d short"):"")}));}
-  if(!editingTitle){
-    top.appendChild(Object.assign(el("span","title"+(kind==="complete"?" done":"")),{textContent:(kind==="complete"?"\u2713 ":"")+(r.title||"(untitled)")}));
-  }
+  top.appendChild(Object.assign(el("span","title"+(kind==="complete"?" done":"")),{textContent:(kind==="complete"?"\u2713 ":"")+(r.title||"(untitled)")}));
   main.appendChild(top);
-  if(editingTitle)main.appendChild(titleEditor(r));
 
   if(state.mapped.AssignedDate&&r.assignedDate)main.appendChild(Object.assign(el("div","asgdate"),{textContent:"Assigned "+fmtShortDate(r.assignedDate)}));
 
+  // Tags are read-only now; all editing goes through the single Edit panel.
   const tags=el("div","tags");
-  if(state.mapped.Project&&!editingProj){
+  if(state.mapped.Project){
     recProj(r).forEach(p=>{if(p===NO_PROJECT)return;tags.appendChild(Object.assign(el("span","tag proj"),{textContent:p}));});
-    tags.appendChild(makeEditChip(recProj(r)[0]!==NO_PROJECT,"\uFF0B project","Set project",()=>openInlineEditor("proj",r.id)));
   }
-  if(state.mapped.Category&&!editingCat){
+  if(state.mapped.Category){
     recCats(r).forEach(c=>{if(c===NO_CAT)return;const x=el("span","tag cat");x.style.background=catColor(c);x.textContent=c;tags.appendChild(x);});
-    tags.appendChild(makeEditChip(recCats(r)[0]!==NO_CAT,"\uFF0B category","Edit category",()=>openInlineEditor("cat",r.id)));
   }
-  if(state.mapped.Priority&&!editingPri){
+  if(state.mapped.Priority){
     const p=normPriority(r.priority);
     if(p)tags.appendChild(Object.assign(el("span","tag pri pri-"+p.toLowerCase()),{textContent:"\u25B2 "+p}));
-    tags.appendChild(makeEditChip(!!p,"\uFF0B priority","Set priority",()=>openInlineEditor("pri",r.id)));
   }
-  if(state.mapped.Recurrence&&!editingRec){
+  if(state.mapped.Recurrence){
     const days=parseRecurDays(r.recurrence);
     if(days)tags.appendChild(Object.assign(el("span","tag recur"),{textContent:"\u21BB "+fmtRecurDays(days)}));
-    tags.appendChild(makeEditChip(!!days,"\uFF0B repeat","Set recurrence",()=>openInlineEditor("rec",r.id)));
   }
   if(tags.children.length)main.appendChild(tags);
 
-  if(state.mapped.Project&&editingProj)main.appendChild(projEditor(r));
-  if(state.mapped.Category&&editingCat)main.appendChild(catEditor(r));
-  if(state.mapped.Priority&&editingPri)main.appendChild(priEditor(r));
-  if(state.mapped.Recurrence&&editingRec)main.appendChild(recEditor(r));
-
   const hasDesc=r.description!==null&&r.description!==undefined&&String(r.description).trim()!=="";
-  if(expanded&&!editingTitle&&!editingDesc){
-    const e=el("span","editlink");e.textContent="Edit title";e.onclick=(ev)=>{ev.stopPropagation();openInlineEditor("title",r.id);};main.appendChild(e);
+  if(state.mapped.Description&&hasDesc&&!editing){
+    const d=el("div","desc"+(expanded?" full":""));d.textContent=String(r.description);main.appendChild(d);
+    main.appendChild(Object.assign(el("div","descmore"),{textContent:expanded?"Show less \u25B4":"Show more \u25BE"}));
   }
-  if(state.mapped.Description){
-    if(editingDesc)main.appendChild(descEditor(r));
-    else if(hasDesc){
-      const d=el("div","desc"+(expanded?" full":""));d.textContent=String(r.description);main.appendChild(d);
-      main.appendChild(Object.assign(el("div","descmore"),{textContent:expanded?"Show less \u25B4":"Show more \u25BE"}));
-      if(expanded){const e=el("span","editlink");e.textContent="Edit note";e.onclick=(ev)=>{ev.stopPropagation();openInlineEditor("desc",r.id);};main.appendChild(e);}
-    }else{const a=el("span","addnote");a.textContent="\uFF0B Add note";a.onclick=(ev)=>{ev.stopPropagation();openInlineEditor("desc",r.id);};main.appendChild(a);}
-  }
+
+  // The one editor.
+  if(editing)main.appendChild(editPanel(r));
+
   row.appendChild(main);
   if(state.mapped.Status)row.appendChild(statusControl(r,kind));
+  row.appendChild(editBtn(r));
   row.appendChild(dupBtn(r));
   row.appendChild(snoozeControl(r));
   row.appendChild(deleteBtn(r));
 
-  row.onclick=()=>{if(!editingDesc&&!editingTitle){if(expanded)state.expandedRows.delete(r.id);else state.expandedRows.add(r.id);render();}selectInGrist(r.id);};
+  row.onclick=()=>{if(!editing){if(expanded)state.expandedRows.delete(r.id);else state.expandedRows.add(r.id);render();}selectInGrist(r.id);};
   return row;
+}
+function editBtn(r){
+  const b=el("button","editbtn"+(state.editingRow===r.id?" on":""));
+  b.textContent="\u270E";
+  b.title="Edit this task";
+  b.setAttribute("aria-label","Edit task: "+(r.title||"untitled"));
+  b.onclick=(e)=>{e.stopPropagation();
+    if(state.editingRow===r.id){state.editingRow=null;}
+    else{clearTransient();state.editingRow=r.id;}
+    render();};
+  return b;
 }
 
 /* ----- editors (ported from the calendar) ----- */
-function clearTransient(){state.openDateRow=null;state.openStatusRow=null;state.openSnoozeRow=null;state.openDtcRow=null;state.editingDescRow=null;state.editingCatRow=null;state.editingPriRow=null;state.editingProjRow=null;state.editingRecRow=null;state.editingTitleRow=null;}
-function openInlineEditor(which,id){clearTransient();if(which==="desc")state.editingDescRow=id;else if(which==="cat")state.editingCatRow=id;else if(which==="pri")state.editingPriRow=id;else if(which==="proj")state.editingProjRow=id;else if(which==="rec")state.editingRecRow=id;else if(which==="title")state.editingTitleRow=id;render();}
-function makeEditChip(has,empty,tip,fn){const c=el("span","tag editchip");c.textContent=has?"\u270E":empty;c.title=tip;c.onclick=(e)=>{e.stopPropagation();fn();};return c;}
+/* ---- Unified edit panel: every field in one place, one Save. ----
+   Replaces the old per-field pencil chips. Writes only fields that changed. */
+function editPanel(r){
+  const ed=el("div","editpanel");
+  ["click","mousedown"].forEach(ev=>ed.addEventListener(ev,e=>e.stopPropagation()));
+
+  // draft holds the pending values; nothing is written until Save
+  const d={
+    title: r.title||"",
+    date:  r.due?(pad4(r.due.y)+"-"+pad2(r.due.mo+1)+"-"+pad2(r.due.d)):"",
+    time:  (r.due&&r.due.minuteOfDay>=0)?(pad2(Math.floor(r.due.minuteOfDay/60))+":"+pad2(r.due.minuteOfDay%60)):"09:00",
+    noDue: !r.due,
+    status: (r.status===null||r.status===undefined)?"":String(r.status),
+    project: recProj(r).find(v=>v!==NO_PROJECT)||"",
+    cats: recCats(r).filter(c=>c!==NO_CAT),
+    priority: normPriority(r.priority)||"",
+    recur: (parseRecurDays(r.recurrence)||""),
+    dtc: (daysToComplete(r)===null?"":daysToComplete(r)),
+    description: (r.description===null||r.description===undefined)?"":String(r.description),
+  };
+
+  const row=(label)=>{const x=el("div","ep-row");x.appendChild(Object.assign(el("label"),{textContent:label}));return x;};
+
+  // Title
+  {const x=row("Title");
+   const i=document.createElement("input");i.type="text";i.className="ep-in";i.value=d.title;i.placeholder="Task title\u2026";
+   i.oninput=()=>d.title=i.value;x.appendChild(i);ed.appendChild(x);
+   requestAnimationFrame(()=>i.focus());}
+
+  // Due date (+ optional time) + no-due-date
+  {const x=row("Due");
+   const di=document.createElement("input");di.type="date";di.className="ep-in ep-sm";di.value=d.date;di.disabled=d.noDue;
+   di.oninput=()=>d.date=di.value;x.appendChild(di);
+   let ti=null;
+   if(state.dueIsDateTime){ti=document.createElement("input");ti.type="time";ti.className="ep-in ep-sm";ti.value=d.time;ti.disabled=d.noDue;
+     ti.oninput=()=>d.time=ti.value;x.appendChild(ti);}
+   const sc=el("div","ep-quick");
+   [["+1d",1],["+7d",7],["+30d",30]].forEach(([lab,n])=>{const b=el("button");b.type="button";b.textContent=lab;
+     b.onclick=()=>{if(d.noDue)return;const base=d.date?d.date.split("-").map(Number):null;
+       const dt=base?new Date(base[0],base[1]-1,base[2]):new Date();dt.setDate(dt.getDate()+n);
+       d.date=iso(dt);di.value=d.date;};sc.appendChild(b);});
+   x.appendChild(sc);
+   const lab=document.createElement("label");lab.className="ep-check";
+   const cb=document.createElement("input");cb.type="checkbox";cb.checked=d.noDue;
+   cb.onchange=()=>{d.noDue=cb.checked;di.disabled=cb.checked;if(ti)ti.disabled=cb.checked;};
+   lab.append(cb,document.createTextNode(" No due date (ongoing)"));
+   x.appendChild(lab);
+   ed.appendChild(x);}
+
+  // Status
+  if(state.mapped.Status){const x=row("Status");
+   const s=document.createElement("select");s.className="ep-in ep-sm";
+   s.appendChild(opt("","\u2014 none \u2014",!d.status));
+   statusOptions().forEach(v=>s.appendChild(opt(v,v,v===d.status)));
+   s.onchange=()=>d.status=s.value;x.appendChild(s);ed.appendChild(x);}
+
+  // Project
+  if(state.mapped.Project){const x=row("Project");
+   const ADD="__add__";
+   const s=document.createElement("select");s.className="ep-in";
+   s.appendChild(opt("","\u2014 none \u2014",!d.project));
+   knownProjects().forEach(p=>s.appendChild(opt(p,p,p===d.project)));
+   s.appendChild(opt(ADD,"\uFF0B Add new project\u2026",false));
+   const ai=document.createElement("input");ai.type="text";ai.className="ep-in ep-add";ai.placeholder="New project name\u2026";ai.style.display="none";
+   ai.oninput=()=>d.project=ai.value.trim();
+   s.onchange=()=>{if(s.value===ADD){ai.style.display="";ai.focus();d.project=ai.value.trim();}
+     else{ai.style.display="none";d.project=s.value;}};
+   x.appendChild(s);x.appendChild(ai);ed.appendChild(x);}
+
+  // Category (multi if the column is a ChoiceList)
+  if(state.mapped.Category){const x=row("Category");
+   const wrap=el("div","ep-chips");
+   const sel=new Set(d.cats);
+   knownCategories().forEach(c=>{
+     const chip=el("button","pchip"+(sel.has(c)?" sel":""));chip.type="button";chip.textContent=c;
+     chip.onclick=()=>{
+       if(sel.has(c))sel.delete(c);
+       else{if(!state.catMulti)sel.clear();sel.add(c);}
+       d.cats=Array.from(sel);
+       wrap.querySelectorAll(".pchip").forEach(n=>n.classList.toggle("sel",sel.has(n.textContent)));
+     };
+     wrap.appendChild(chip);
+   });
+   x.appendChild(wrap);ed.appendChild(x);}
+
+  // Priority (fixed three)
+  if(state.mapped.Priority){const x=row("Priority");
+   const wrap=el("div","ep-chips");
+   PRIORITIES.forEach(p=>{
+     const chip=el("button","pchip pri-"+p.toLowerCase()+(d.priority===p?" sel":""));chip.type="button";chip.textContent=p;
+     chip.onclick=()=>{d.priority=(d.priority===p)?"":p;
+       wrap.querySelectorAll(".pchip").forEach(n=>n.classList.toggle("sel",n.textContent===d.priority));};
+     wrap.appendChild(chip);
+   });
+   x.appendChild(wrap);ed.appendChild(x);}
+
+  // Days to complete
+  if(state.mapped.DaysToComplete){const x=row("Est. work");
+   const i=document.createElement("input");i.type="number";i.min="0";i.step="0.5";i.className="ep-in ep-sm";i.value=d.dtc;i.placeholder="days";
+   i.oninput=()=>d.dtc=i.value;x.appendChild(i);
+   x.appendChild(Object.assign(el("span","ep-hint"),{textContent:"days of work"}));ed.appendChild(x);}
+
+  // Recurrence
+  if(state.mapped.Recurrence){const x=row("Repeat");
+   const i=document.createElement("input");i.type="number";i.min="1";i.className="ep-in ep-sm";i.value=d.recur;i.placeholder="days";
+   i.oninput=()=>d.recur=i.value;x.appendChild(i);
+   x.appendChild(Object.assign(el("span","ep-hint"),{textContent:"days (blank = no repeat)"}));ed.appendChild(x);}
+
+  // Description
+  if(state.mapped.Description){const x=row("Note");
+   const t=document.createElement("textarea");t.className="ep-in ep-ta";t.value=d.description;t.placeholder="Add a note\u2026";
+   t.oninput=()=>d.description=t.value;x.appendChild(t);ed.appendChild(x);}
+
+  // Actions
+  const acts=el("div","ep-actions");
+  const save=el("button","fe-save");save.type="button";save.textContent="Save";
+  save.onclick=()=>{
+    state.editingRow=null;
+    const restore=undoableFieldChange([r.id]);
+    let changed=false;
+
+    // Title
+    const nt=d.title.trim();
+    if(nt&&nt!==(r.title||"")){setTitle(r.id,nt);changed=true;}
+
+    // Due date — compare on components, not the raw timestamp, so a DateTime
+    // column doesn't register a phantom change every time the panel opens.
+    const hadDue=!!r.due;
+    if(d.noDue||!d.date){
+      if(hadDue){setDue(r.id,null);changed=true;}
+    }else{
+      const curDate=hadDue?(pad4(r.due.y)+"-"+pad2(r.due.mo+1)+"-"+pad2(r.due.d)):"";
+      const curTime=(hadDue&&r.due.minuteOfDay>=0)?(pad2(Math.floor(r.due.minuteOfDay/60))+":"+pad2(r.due.minuteOfDay%60)):"";
+      const newTime=state.dueIsDateTime?(d.time||"09:00"):"";
+      if(d.date!==curDate||(state.dueIsDateTime&&newTime!==curTime)){
+        setDue(r.id,encodeDue(d.date,state.dueIsDateTime?(d.time||"09:00"):null));changed=true;
+      }
+    }
+
+    // Status
+    if(state.mapped.Status){
+      const cur=(r.status===null||r.status===undefined)?"":String(r.status);
+      if(d.status!==cur){setStatus(r.id,d.status||null);changed=true;}
+    }
+    // Project
+    if(state.mapped.Project){
+      const cur=recProj(r).find(v=>v!==NO_PROJECT)||"";
+      if(d.project!==cur){setProject(r.id,d.project?[d.project]:[]);changed=true;}
+    }
+    // Category
+    if(state.mapped.Category){
+      const cur=recCats(r).filter(c=>c!==NO_CAT);
+      if(cur.slice().sort().join("|")!==d.cats.slice().sort().join("|")){setCategory(r.id,d.cats);changed=true;}
+    }
+    // Priority
+    if(state.mapped.Priority){
+      const cur=normPriority(r.priority)||"";
+      if(d.priority!==cur){setPriority(r.id,d.priority||null);changed=true;}
+    }
+    // Days to complete
+    if(state.mapped.DaysToComplete){
+      const cur=daysToComplete(r);
+      const nv=(d.dtc===""||d.dtc===null)?null:Number(d.dtc);
+      if((nv===null)!==(cur===null)||(nv!==null&&nv!==cur)){setDaysToComplete(r.id,nv);changed=true;}
+    }
+    // Recurrence
+    if(state.mapped.Recurrence){
+      const cur=parseRecurDays(r.recurrence);
+      const nv=(d.recur===""||d.recur===null)?null:parseInt(d.recur,10);
+      if((nv===null)!==(cur===null)||(nv!==null&&nv!==cur)){setRecurrence(r.id,(nv&&nv>=1)?nv:null);changed=true;}
+    }
+    // Description
+    if(state.mapped.Description){
+      const cur=(r.description===null||r.description===undefined)?"":String(r.description);
+      if(d.description!==cur){setDescription(r.id,d.description);changed=true;}
+    }
+
+    if(changed)pushUndo("Edited \u201c"+(nt||r.title||"task")+"\u201d",restore);
+    render();
+  };
+  const cancel=el("button","fe-cancel");cancel.type="button";cancel.textContent="Cancel";
+  cancel.onclick=()=>{state.editingRow=null;render();};
+  acts.append(save,cancel);ed.appendChild(acts);
+  return ed;
+}
+
+function clearTransient(){state.openDateRow=null;state.openStatusRow=null;state.openSnoozeRow=null;state.openDtcRow=null;state.editingRow=null;}
+function openInlineEditor(which,id){clearTransient();state.editingRow=id;render();}
 
 async function deleteTask(rowId,title){
   const label=title&&String(title).trim()?"\u201c"+String(title).trim()+"\u201d":"this task";
@@ -1345,7 +1669,8 @@ function dueCell(r){
   const wrap=el("div","duewrap");
   const due=r.due;
   const label=due?(due.timeStr?due.timeStr:fmtShortDate(due)):"No date";
-  const btn=el("button","time editable"+(due?"":" nodate"));btn.title="Click to set a due date";
+  const btn=el("button","time editable"+(due?"":" nodate"));
+  btn.title=due?"Click to change or clear the due date":"No due date \u2014 click to set one";
   btn.innerHTML=esc(label)+' <span class="pen">\u270E</span>';
   btn.onclick=(e)=>{e.stopPropagation();const was=state.openDateRow===r.id;clearTransient();state.openDateRow=was?null:r.id;render();};
   wrap.appendChild(btn);
@@ -1379,14 +1704,29 @@ function shiftDateInput(input,n){const b=input.value?input.value.split("-").map(
 function dateEditor(r){
   const ed=el("div","dateeditor");["click","mousedown"].forEach(ev=>ed.addEventListener(ev,e=>e.stopPropagation()));
   const due=r.due||todayDue();
-  const dIn=document.createElement("input");dIn.type="date";dIn.value=pad4(due.y)+"-"+pad2(due.mo+1)+"-"+pad2(due.d);ed.appendChild(dIn);
+  const dIn=document.createElement("input");dIn.type="date";
+  dIn.value=r.due?(pad4(due.y)+"-"+pad2(due.mo+1)+"-"+pad2(due.d)):"";   // blank when undated
+  ed.appendChild(dIn);
   let tIn=null;
   if(state.dueIsDateTime){tIn=document.createElement("input");tIn.type="time";const mod=due.minuteOfDay>=0?due.minuteOfDay:540;tIn.value=pad2(Math.floor(mod/60))+":"+pad2(mod%60);ed.appendChild(tIn);}
   const sc=el("div","de-shortcuts");
   [["+1d",1,"Next day"],["+7d",7,"In 7 days"],["+14d",14,"In 14 days"],["+30d",30,"In 30 days"]].forEach(o=>{const b=el("button");b.textContent=o[0];b.title=o[2];b.onclick=()=>shiftDateInput(dIn,o[1]);sc.appendChild(b);});
   ed.appendChild(sc);
+  // Explicit "no due date" — an ongoing task, tracked but never urgent.
+  const none=el("button","de-none"+(r.due?"":" on"));
+  none.textContent="\u221E No due date \u2014 ongoing";
+  none.title="Track this without a deadline. It will never be flagged overdue or pinned.";
+  none.onclick=()=>{state.openDateRow=null;setDue(r.id,null);render();};
+  ed.appendChild(none);
   const acts=el("div","de-actions");
-  const save=el("button","de-save");save.textContent="Save";save.onclick=()=>{if(!dIn.value)return;state.openDateRow=null;setDue(r.id,encodeDue(dIn.value,tIn?tIn.value:null));render();};
+  const save=el("button","de-save");save.textContent="Save";
+  save.onclick=()=>{
+    state.openDateRow=null;
+    // A blank date field now means "no due date" rather than a silent no-op.
+    if(!dIn.value)setDue(r.id,null);
+    else setDue(r.id,encodeDue(dIn.value,tIn?tIn.value:null));
+    render();
+  };
   const cancel=el("button","de-cancel");cancel.textContent="Cancel";cancel.onclick=()=>{state.openDateRow=null;render();};
   acts.append(save,cancel);ed.appendChild(acts);return ed;
 }
@@ -1415,19 +1755,6 @@ function statusControl(r,kind){
   return wrap;
 }
 
-function buildTagPicker(initial,multi,known,noun){
-  const wrap=el("div","pickwrap");const picker=el("div","picker");const selected=new Set(initial||[]);
-  const all=Array.from(new Set((known||[]).concat(Array.from(selected))));
-  function sync(){picker.querySelectorAll(".pchip").forEach(c=>c.classList.toggle("sel",selected.has(c.textContent)));}
-  function chip(name){const c=el("div","pchip"+(selected.has(name)?" sel":""));c.textContent=name;c.onclick=(e)=>{e.stopPropagation();if(selected.has(name))selected.delete(name);else{if(!multi)selected.clear();selected.add(name);}sync();};return c;}
-  all.forEach(n=>picker.appendChild(chip(n)));wrap.appendChild(picker);
-  const add=el("div","padd");const inp=document.createElement("input");inp.type="text";inp.placeholder=multi?("Add a "+(noun||"value")+"\u2026"):("Or type a "+(noun||"value")+"\u2026");
-  const btn=document.createElement("button");btn.textContent="Add";
-  const doAdd=()=>{const v=inp.value.trim();if(!v)return;if(!multi)selected.clear();selected.add(v);if(!Array.prototype.some.call(picker.querySelectorAll(".pchip"),c=>c.textContent===v))picker.appendChild(chip(v));sync();inp.value="";};
-  btn.onclick=(e)=>{e.stopPropagation();doAdd();};inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();doAdd();}};
-  add.append(inp,btn);wrap.appendChild(add);
-  return{element:wrap,get:()=>Array.from(selected)};
-}
 function fieldEditShell(){const ed=el("div","fieldedit");["click","mousedown"].forEach(ev=>ed.addEventListener(ev,e=>e.stopPropagation()));return ed;}
 function knownProjects(){
   if(state.choiceProject.length)return state.choiceProject;
@@ -1436,82 +1763,6 @@ function knownProjects(){
 function knownCategories(){
   if(state.choiceCategory.length)return state.choiceCategory;
   return uniqSorted([].concat.apply([],state.records.map(recCats))).filter(c=>c!==NO_CAT);
-}
-function buildProjectPicker(current,onSave,onCancel){
-  // returns a fieldEditShell-style element; calls onSave(projectName|null) or onCancel()
-  const ed=fieldEditShell();
-  const projs=knownProjects();
-  const ADD_SENTINEL="__add_new__";
-  const wrap=el("div");wrap.style.cssText="display:flex;flex-direction:column;gap:8px;";
-  const sel=document.createElement("select");sel.className="sortsel";sel.style.cssText="width:100%;";
-  sel.appendChild(opt("","— none —",!current));
-  projs.forEach(p=>sel.appendChild(opt(p,p,p===current)));
-  sel.appendChild(opt(ADD_SENTINEL,"＋ Add new project…",false));
-  wrap.appendChild(sel);
-  // hidden "new project" input, revealed when sentinel chosen
-  const addRow=el("div");addRow.style.cssText="display:flex;gap:6px;display:none;";
-  const addInp=document.createElement("input");addInp.type="text";addInp.placeholder="New project name…";addInp.style.cssText="flex:1;font:inherit;padding:5px 8px;border:1px solid var(--line-strong);border-radius:6px;";
-  addRow.appendChild(addInp);wrap.appendChild(addRow);
-  sel.onchange=()=>{addRow.style.display=sel.value===ADD_SENTINEL?"flex":"none";if(sel.value===ADD_SENTINEL)addInp.focus();};
-  ed.appendChild(wrap);
-  const getVal=()=>{if(sel.value===ADD_SENTINEL){const v=addInp.value.trim();return v||null;}return sel.value||null;};
-  ed.appendChild(feActions(()=>onSave(getVal()),onCancel));
-  return ed;
-}
-function projEditor(r){
-  const cur=recProj(r).find(v=>v!==NO_PROJECT)||"";
-  return buildProjectPicker(cur,
-    (v)=>{state.editingProjRow=null;setProject(r.id,v?[v]:[]);render();},
-    ()=>{state.editingProjRow=null;render();});
-}
-function recEditor(r){
-  const ed=fieldEditShell();
-  const cur=parseRecurDays(r.recurrence);
-  const line=el("div");line.style.cssText="display:flex;gap:6px;align-items:center;flex-wrap:wrap;";
-  line.appendChild(Object.assign(el("span"),{textContent:"Repeat every"}));
-  const num=document.createElement("input");num.type="number";num.min="1";num.max="3650";num.value=cur||14;num.style.cssText="width:72px;font:inherit;padding:5px 6px;border:1px solid var(--line-strong);border-radius:6px;";
-  line.append(num,Object.assign(el("span"),{textContent:"days"}));ed.appendChild(line);
-  const hint=el("div");hint.style.cssText="font-size:11px;color:var(--ink-faint);";hint.textContent="When you complete this task, a new copy is created this many days out.";ed.appendChild(hint);
-  const acts=el("div","fe-actions");
-  const save=el("button","fe-save");save.textContent="Save";save.onclick=()=>{const n=parseInt(num.value,10);state.editingRecRow=null;if(n>=1)setRecurrence(r.id,n);render();};
-  const off=el("button","fe-cancel");off.textContent="Not recurring";off.onclick=()=>{state.editingRecRow=null;setRecurrence(r.id,null);render();};
-  const cancel=el("button","fe-cancel");cancel.textContent="Cancel";cancel.onclick=()=>{state.editingRecRow=null;render();};
-  acts.append(save,off,cancel);ed.appendChild(acts);return ed;
-}
-function catEditor(r){const ed=fieldEditShell();const p=buildTagPicker(recCats(r).filter(c=>c!==NO_CAT),state.catMulti,knownCategories(),"category");ed.appendChild(p.element);ed.appendChild(feActions(()=>{state.editingCatRow=null;setCategory(r.id,p.get());render();},()=>{state.editingCatRow=null;render();}));return ed;}
-function priEditor(r){
-  const ed=fieldEditShell();
-  let cur=normPriority(r.priority);
-  const picker=el("div","picker");
-  const chips={};
-  PRIORITIES.forEach(p=>{
-    const c=el("div","pchip pri-"+p.toLowerCase()+(cur===p?" sel":""));c.textContent=p;
-    c.onclick=(e)=>{e.stopPropagation();cur=(cur===p)?null:p;   // click again to clear
-      PRIORITIES.forEach(q=>chips[q].classList.toggle("sel",cur===q));};
-    chips[p]=c;picker.appendChild(c);
-  });
-  ed.appendChild(picker);
-  ed.appendChild(feActions(
-    ()=>{state.editingPriRow=null;setPriority(r.id,cur);render();},
-    ()=>{state.editingPriRow=null;render();}));
-  return ed;
-}
-function titleEditor(r){
-  const ed=fieldEditShell();
-  const inp=document.createElement("input");inp.type="text";inp.value=r.title||"";inp.placeholder="Task title…";
-  inp.style.cssText="font:inherit;font-weight:600;font-size:13.5px;padding:5px 8px;border:1px solid var(--line-strong);border-radius:6px;width:100%;";
-  inp.onclick=e=>e.stopPropagation();
-  ed.appendChild(inp);
-  ed.appendChild(feActions(
-    ()=>{state.editingTitleRow=null;if(inp.value.trim())setTitle(r.id,inp.value);render();},
-    ()=>{state.editingTitleRow=null;render();}));
-  // focus after render
-  requestAnimationFrame(()=>inp.focus());
-  return ed;
-}
-function descEditor(r){
-  const ed=fieldEditShell();const ta=document.createElement("textarea");ta.value=(r.description!==null&&r.description!==undefined)?String(r.description):"";ta.placeholder="Add a note\u2026";ed.appendChild(ta);
-  ed.appendChild(feActions(()=>{state.editingDescRow=null;setDescription(r.id,ta.value);render();},()=>{state.editingDescRow=null;render();}));return ed;
 }
 function feActions(onSave,onCancel){const a=el("div","fe-actions");const s=el("button","fe-save");s.textContent="Save";s.onclick=onSave;const c=el("button","fe-cancel");c.textContent="Cancel";c.onclick=onCancel;a.append(s,c);return a;}
 
@@ -1549,6 +1800,7 @@ if(state.haveGrist){
     if(typeof o.shuffled==="boolean")state.shuffled=o.shuffled;
     if(typeof o.statView==="string"||o.statView===null)state.statView=o.statView||null;
     if(typeof o.headCollapsed==="boolean")state.headCollapsed=o.headCollapsed;
+    if(typeof o.railOpen==="boolean")state.railOpen=o.railOpen;
     render();
   });
   grist.onRecords((records,mappings)=>{ingest(records,mappings);try{processRecurrence();}catch(e){console.error("recurrence check skipped:",e);}render();if(!state.typesChecked&&state.cols.DueDate){state.typesChecked=true;detectColumnTypes();}});
